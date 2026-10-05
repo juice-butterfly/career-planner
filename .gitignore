@@ -8,17 +8,7 @@
 # ---------- 本地备份（含数据库导出与带密钥的 .env 打包，切勿提交） ----------
 backup-*/
 
-# ---------- 学校数据（校方资料，公开仓库一律隐藏） ----------
-backend/src/schoolColleges.js
-backend/src/curriculum2026.js
-backend/src/curriculumBuild.js
-backend/src/crawler/
-backend/src/schoolContext.js
-backend/src/utils/schoolConfig.js
-backend/src/studyCenter.js
-backend/src/studyAbroad.js
-backend/src/seedJobMajors.js
-backend/src/recommendMajors.js
+# ---------- 一次性培养方案数据脚本与本地工具目录（含校方资料，不公开） ----------
 backend/_align_curriculums.mjs
 backend/_parseCurriculum.mjs
 backend/_seed_courses_from_pdf.mjs
