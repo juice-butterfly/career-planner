@@ -1,0 +1,58 @@
+# ---------- 敏感信息 ----------
+# .env 含智谱 API Key，必须排除，切勿提交
+.env
+.env.local
+.env.*.local
+*.env
+
+# ---------- 本地备份（含数据库导出与带密钥的 .env 打包，切勿提交） ----------
+backup-*/
+
+# ---------- 学校数据（校方资料，公开仓库一律隐藏） ----------
+backend/src/schoolColleges.js
+backend/src/curriculum2026.js
+backend/src/curriculumBuild.js
+backend/src/crawler/
+backend/src/schoolContext.js
+backend/src/utils/schoolConfig.js
+backend/src/studyCenter.js
+backend/src/studyAbroad.js
+backend/src/seedJobMajors.js
+backend/src/recommendMajors.js
+backend/_align_curriculums.mjs
+backend/_parseCurriculum.mjs
+backend/_seed_courses_from_pdf.mjs
+backend/_seed_curriculums.mjs
+.trae/
+
+# ---------- 依赖 ----------
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# ---------- 构建产物 ----------
+frontend/dist/
+dist/
+
+# ---------- 数据库（本地 SQLite 数据文件） ----------
+backend/data.sqlite
+backend/data.sqlite-wal
+backend/data.sqlite-shm
+*.sqlite
+*.sqlite3
+*.db
+
+# ---------- 日志/临时 ----------
+*.log
+logs/
+temp/
+.DS_Store
+Thumbs.db
+
+# ---------- IDE ----------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

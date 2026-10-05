@@ -1,0 +1,25 @@
+{
+  "name": "career-planner-backend",
+  "version": "1.0.0",
+  "description": "大学生职业生涯规划平台后端（Node 内置 SQLite，零原生依赖）",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "seed": "node src/seed.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.5",
+    "docx": "^9.7.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.24.4",
+    "nodemailer": "^10.0.10",
+    "pdfjs-dist": "^6.3.289"
+  }
+}
