@@ -1,9 +1,34 @@
-# 🎓 职引 · 大学生职业生涯规划平台
+# 职引 · Career Compass
 
-面向大学生的一站式生涯规划 Web 应用：**自我认知测评 → 生涯规划 → 求职赋能** 完整链路。
-核心亮点：AI 生成个性化"大学四年路线图" + 本校培养方案/升学/竞赛/证书资料 + 社区分享。
+> **把模糊的「毕业焦虑」，换成可执行的四年路线图。**
+> 面向大学生的校园生涯规划平台：测评定位 → 路线规划 → 深造/竞赛/证书资源 → AI 顾问 → 社区陪伴。
 
-> ⚠️ **脱敏说明**：本公开仓库中的"本校资料"（学院专业、培养方案课程、深造中心校方细则、国际联合培养项目、岗位-专业映射）均为**通用示例数据**，仅用于跑通功能与代码展示，不包含任何校方真实资料。部署到你的学校时，请按各文件内注释替换为贵校官方数据（保持导出结构与字段不变即可）。涉及替换的文件见下文「示例数据文件清单」。
+**在线 Demo（单文件交互演示）→ https://juice-butterfly.github.io/career-planner/**
+
+---
+
+## At a glance (English)
+
+> A career-planning platform for college students. Take a multi-dimensional assessment, get an AI-analyzed profile, then turn it into a four-year roadmap you can check off semester by semester.
+
+- **Assessment** — 52-question test across interest / ability / personality / values, radar chart + AI interpretation.
+- **Roadmap** — one-click generation of a 1–4 year staged plan from your target job or further-study path, with progress tracking and overdue reminders.
+- **Study center** — postgraduate recommendation (保研) / entrance exam (考研) / study-abroad guides, school-subscription tracking, AI positioning reports.
+- **Competition & certificate centers** — searchable contest/cert libraries, AI recommendation, add-to-plan.
+- **AI career advisor** — streaming chat (SSE), mock interviews, resume optimization / generation / match.
+- **Community** — experience posts + anonymous treehole, points, growth levels, admin moderation.
+
+The rest of this README is Chinese-first. The GitHub Pages demo is a self-contained static page with sample data — no backend, no AI key required.
+
+---
+
+## 在线演示
+
+[`docs/index.html`](docs/index.html) 是**单文件交互演示页**（无后端、无 AI Key、内置示例数据），可完整体验核心链路：
+
+> 首页 → 四维测评 → 结果画像（雷达图 + 推荐方向）→ 四年路线图 → 深造中心（考研/保研示例）
+
+部署在 GitHub Pages：**https://juice-butterfly.github.io/career-planner/**（自动从 `main` 分支 `/docs` 发布）。
 
 ---
 
@@ -38,30 +63,30 @@
 
 ```
 career-planner/
+├── docs/                    # GitHub Pages 单文件交互演示（无后端依赖）
 ├── backend/
 │   └── src/
-│       ├── db.js                # 双方言建表 + 种子（MySQL 分支 / SQLite 分支）
-│       ├── db/driver.js         # 统一异步驱动 {all,one,run,exec}
-│       ├── db/translate.js      # SQLite→MySQL SQL 自动转译
-│       ├── server.js            # Express 入口
-│       ├── routes/index.js      # 全量 API（挂 /api）
-│       ├── controllers/         # 控制器
-│       ├── middleware/auth.js   # JWT（HttpOnly Cookie 优先，兼容 Bearer）
-│       ├── repos/base.js        # 数据访问层（async）
-│       ├── utils/ai.js          # AI 核心：chat / chatJSON(容错+护栏) / chatStream(SSE)
-│       ├── utils/sensitive.js   # 违禁词过滤
-│       ├── tasks.js             # AI 长任务状态机
-│       ├── prompts/index.js     # 结构化 JSON 提示词模板
-│       ├── growth.js            # 等级/成就/签到/积分
+│       ├── db.js            # 双方言建表 + 种子（MySQL / SQLite 分支）
+│       ├── db/driver.js     # 统一异步驱动 {all,one,run,exec}
+│       ├── db/translate.js  # SQLite→MySQL SQL 自动转译
+│       ├── server.js        # Express 入口
+│       ├── routes/index.js  # 全量 API（挂 /api）
+│       ├── controllers/     # 控制器
+│       ├── middleware/auth.js # JWT（HttpOnly Cookie 优先，兼容 Bearer）
+│       ├── repos/base.js    # 数据访问层（async）
+│       ├── utils/ai.js      # AI 核心：chat / chatJSON(容错+护栏) / chatStream(SSE)
+│       ├── utils/sensitive.js # 违禁词过滤
+│       ├── tasks.js         # AI 长任务状态机
+│       ├── prompts/index.js # 结构化 JSON 提示词模板
 │       └── ...（业务数据与逻辑）
 └── frontend/
     └── src/
-        ├── api/                 # axios 封装（withCredentials）+ SSE 流式
-        ├── router/              # 路由 + 登录/管理员守卫
-        ├── store/               # Pinia（user / theme）
-        ├── layout/MainLayout.vue# 主布局（移动端抽屉侧栏 + AI 悬浮助手）
-        ├── views/               # 19 个页面
-        └── components/          # AiAssistant / PlanItem / StudyProfileForm / SiteLogo
+        ├── api/             # axios 封装（withCredentials）+ SSE 流式
+        ├── router/          # 路由 + 登录/管理员守卫
+        ├── store/           # Pinia（user / theme）
+        ├── layout/          # 主布局（移动端抽屉侧栏 + AI 悬浮助手）
+        ├── views/           # 19 个页面
+        └── components/      # AiAssistant / PlanItem / StudyProfileForm / SiteLogo
 ```
 
 ---
@@ -123,6 +148,8 @@ DB_NAME=career_planner
 | `backend/src/seedJobMajors.js` | 岗位 ↔ 专业映射（`JOB_MAJORS`） |
 | `backend/src/recommendMajors.js` | 测评 → 专业适配关键词（`HOLLAND_KW`） |
 
+> ⚠️ **脱敏说明**：本公开仓库中的"本校资料"（学院专业、培养方案课程、深造中心校方细则、国际联合培养项目、岗位-专业映射）均为**通用示例数据**，仅用于跑通功能与代码展示，不包含任何校方真实资料。部署到你的学校时，请按各文件内注释替换为贵校官方数据（保持导出结构与字段不变即可）。
+
 ---
 
 ## 工程亮点（AI 集成）
@@ -132,9 +159,12 @@ DB_NAME=career_planner
 - **异步长任务**：AI 保研定位/考研择校/留学定位/培养方案解读 → `tasks` 表 + 前端轮询 + 结果落库回看。
 - **提示注入防御**：输入侧正则检测 + 输出侧护栏（用户内容视为数据，拒绝"忽略指令/泄露提示词"）。
 - **去 AI 味**：`HUMANIZE_STYLE` 注入，中文输出更自然。
+- **移动端适配**：≤768px 侧边栏抽屉、AI 悬浮面板、响应式卡片。
 
 ---
 
-## License
+## 安全说明
 
-本仓库代码供学习与二次开发使用。**请勿将任何校方真实资料、密钥或数据库备份提交到公开仓库。**
+- 真实凭据（智谱 Key / 数据库密码 / JWT_SECRET）只放 `backend/.env`，已被 `.gitignore` 排除，**切勿提交**。
+- 本地备份目录 `backup-*/`（含数据库导出与密钥打包）已排除，**切勿提交**。
+- 请勿将任何校方真实资料、密钥或数据库备份提交到公开仓库。

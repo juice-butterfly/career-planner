@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>职引 · 大学生职业规划平台 — 交互演示</title>
+<style>
+  :root{
+    --brand:#2f6fe0; --brand-dark:#2859b8; --accent:#5a8fe8;
+    --brand-soft:#e8f0fb; --paper:#f6f7fb; --surface:#ffffff;
+    --ink:#1f2433; --ink2:#5c6372; --ink3:#6d7584; --line:#eaecf3;
+    --sage:#34b5a0; --radius:14px; --shadow:0 2px 5px rgba(15,20,40,.06),0 14px 34px -10px rgba(15,20,40,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  a{color:var(--brand);text-decoration:none}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+
+  /* 顶栏 */
+  .top{background:linear-gradient(135deg,#1b3a6b 0%,#2f6fe0 100%);color:#fff;padding:18px 0 0}
+  .top-inner{max-width:760px;margin:0 auto;padding:0 16px}
+  .logo-row{display:flex;align-items:center;gap:10px}
+  .logo-mark{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+  .logo-name{font-weight:700;font-size:18px;letter-spacing:1px}
+  .top-badge{margin-left:auto;font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3)}
+  .hero{padding:26px 0 22px}
+  .hero h1{font-size:24px;font-weight:700;line-height:1.4}
+  .hero p{color:rgba(255,255,255,.85);font-size:13px;margin-top:8px}
+  .demo-note{font-size:11px;opacity:.75;margin-top:10px;background:rgba(0,0,0,.18);display:inline-block;padding:3px 10px;border-radius:8px}
+
+  /* 步骤条 */
+  .steps{display:flex;gap:6px;margin:18px 0;flex-wrap:wrap}
+  .step{flex:1;min-width:96px;text-align:center;padding:10px 6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.2s;font-size:13px;color:var(--ink2)}
+  .step .no{display:block;font-size:11px;color:var(--ink3);font-weight:700}
+  .step.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:var(--shadow)}
+  .step.active .no{color:rgba(255,255,255,.8)}
+  .step.done{background:var(--brand-soft);border-color:var(--accent);color:var(--brand)}
+  .step.done .no{color:var(--accent)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:17px;margin-bottom:6px;position:relative;padding-left:12px}
+  .card h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:16px;border-radius:4px;background:linear-gradient(180deg,var(--brand),var(--accent))}
+  .card .sub{color:var(--ink3);font-size:12px;margin-bottom:16px}
+
+  /* 首页功能宫格 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid .g{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s}
+  .grid .g:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .grid .g .ico{width:40px;height:40px;border-radius:11px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .grid .g b{display:block;font-size:13px}
+  .grid .g span{font-size:11px;color:var(--ink3)}
+
+  /* 测评题 */
+  .q-progress{height:6px;background:var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
+  .q-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));border-radius:6px;transition:width .3s}
+  .q-title{font-size:16px;font-weight:600;margin-bottom:16px;min-height:48px}
+  .opt{display:block;width:100%;text-align:left;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:14px;color:var(--ink);transition:.15s}
+  .opt:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft);font-weight:600}
+  .q-actions{display:flex;justify-content:space-between;margin-top:8px}
+  .btn{border:none;border-radius:10px;padding:10px 18px;font-size:14px;cursor:pointer;font-weight:600;transition:.15s}
+  .btn-p{background:var(--brand);color:#fff}
+  .btn-p:hover{background:var(--brand-dark)}
+  .btn-p:disabled{opacity:.45;cursor:not-allowed}
+  .btn-ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+  .btn-ghost:hover{color:var(--brand);border-color:var(--brand)}
+
+  /* 结果 */
+  .result-hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .radar-wrap{flex:1;min-width:220px}
+  .result-meta{flex:1;min-width:220px}
+  .res-tag{display:inline-block;background:var(--brand-soft);color:var(--brand);font-size:12px;padding:3px 10px;border-radius:999px;margin:3px 4px 3px 0}
+  .res-verdict{font-size:14px;color:var(--ink2);margin:10px 0}
+  .list li{margin-left:18px;font-size:13px;color:var(--ink2);padding:2px 0}
+
+  /* 路线图 */
+  .road{position:relative;padding-left:22px}
+  .road::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);border-radius:2px}
+  .road .yr{position:relative;margin-bottom:16px}
+  .road .yr::before{content:'';position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand-soft)}
+  .road .yr b{color:var(--brand)}
+  .road .yr ul{margin-top:4px;margin-left:16px}
+  .road .yr li{font-size:13px;color:var(--ink2);padding:1px 0}
+
+  /* 深造 tab */
+  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .tabs .tb{padding:7px 16px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:13px;cursor:pointer;color:var(--ink2)}
+  .tabs .tb.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .chip{display:inline-block;font-size:12px;padding:3px 10px;border-radius:8px;margin:3px 4px 0 0;color:#fff}
+  .sec-title{font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--ink)}
+  .kv{font-size:13px;color:var(--ink2);margin:3px 0}
+  .kv b{color:var(--ink)}
+
+  .foot{text-align:center;color:var(--ink3);font-size:12px;margin-top:26px}
+  .hidden{display:none}
+  @media (max-width:480px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:20px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="logo-row">
+      <div class="logo-mark">引</div>
+      <div class="logo-name">职引</div>
+      <span class="top-badge">交互演示 · 示例数据</span>
+    </div>
+    <div class="hero">
+      <h1>把模糊的「毕业焦虑」<br/>变成可执行的四年路线图</h1>
+      <p>测评定位 → 规划路线 → 深造/竞赛资源，一站式走完。本页为单文件演示版，数据为通用示例。</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- 步骤条 -->
+  <div class="steps" id="steps"></div>
+
+  <!-- ① 首页 -->
+  <div class="view" id="v-home">
+    <div class="card">
+      <h2>平台功能</h2>
+      <div class="sub">点击体验核心链路（演示版用内置示例数据）</div>
+      <div class="grid" id="homeGrid"></div>
+    </div>
+    <div class="card">
+      <h2>它解决什么问题</h2>
+      <ul class="list">
+        <li>不知道自己适合什么方向 → 用四维测评 + AI 解读定位</li>
+        <li>不知道大学四年每学期该做什么 → 按目标生成路线图逐项打卡</li>
+        <li>考研/保研/留学/竞赛/考证信息散 → 全部集中并按专业筛选</li>
+        <li>没有同学一起 → 社区交流，匿名树洞倾诉</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ② 测评 -->
+  <div class="view hidden" id="v-quiz">
+    <div class="card">
+      <div class="q-progress"><i id="qBar" style="width:0%"></i></div>
+      <div class="q-title" id="qTitle"></div>
+      <div id="qOpts"></div>
+      <div class="q-actions">
+        <button class="btn btn-ghost" id="qPrev">上一步</button>
+        <button class="btn btn-p" id="qNext" disabled>下一步</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 结果 -->
+  <div class="view hidden" id="v-result">
+    <div class="card">
+      <h2>测评结果 · 四维画像</h2>
+      <div class="result-hero">
+        <div class="radar-wrap"><canvas id="radar" width="320" height="260"></canvas></div>
+        <div class="result-meta">
+          <div id="resVerdict" class="res-verdict"></div>
+          <div class="sec-title">推荐方向</div>
+          <div id="resDirs"></div>
+          <div class="sec-title">适合岗位（示例）</div>
+          <div id="resJobs"></div>
+          <div class="sec-title">建议行动</div>
+          <ul class="list" id="resActs"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>下一步</h2>
+      <p style="font-size:13px;color:var(--ink2)">把结果一键生成「四年路线图」，并按目标匹配考研/保研方向与竞赛证书。</p>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="go('road')">生成我的路线图 →</button>
+        <button class="btn btn-ghost" onclick="go('study')">看深造中心</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 路线图 -->
+  <div class="view hidden" id="v-road">
+    <div class="card">
+      <h2>大学四年路线图 · 示例</h2>
+      <div class="sub">按「目标岗位 → 分阶段」生成，可加入规划逐项打卡（演示版为静态示例）</div>
+      <div class="road" id="roadBox"></div>
+    </div>
+  </div>
+
+  <!-- ⑤ 深造中心 -->
+  <div class="view hidden" id="v-study">
+    <div class="card">
+      <h2>深造中心 · 示例</h2>
+      <div class="tabs" id="studyTabs"></div>
+      <div id="studyBody"></div>
+    </div>
+  </div>
+
+  <div class="foot">职引 · 单文件交互演示（数据为通用示例，非真实校方资料）· <a href="https://github.com/juice-butterfly/career-planner" target="_blank" rel="noopener">GitHub 仓库</a></div>
+</div>
+
+<script>
+/* ============ 内置示例数据 ============ */
+var HOME_ITEMS = [
+  {ico:'🧭',t:'职业测评',d:'四维测评 + AI 解读',dim:'quiz'},
+  {ico:'🗺️',t:'我的规划',d:'四年路线图打卡',dim:'road'},
+  {ico:'🎓',t:'深造中心',d:'考研/保研/留学',dim:'study'},
+  {ico:'🏆',t:'竞赛中心',d:'学科竞赛库',dim:'study'},
+  {ico:'📜',t:'证书中心',d:'考证规划',dim:'study'},
+  {ico:'💬',t:'社区交流',d:'经验与树洞',dim:'home'},
+];
+var QUESTIONS = [
+  {d:'兴趣',q:'周末你更愿意怎么过？',opts:[['泡实验室/写代码做东西',90,30,10,5],['看行业报告/研究财经热点',10,85,20,15],['约朋友聚会/组织活动',20,15,80,25],['整理房间/记账做表格',15,25,15,85]]},
+  {d:'能力',q:'同学通常因为什么夸你？',opts:[['逻辑清楚，能把复杂事讲明白',80,70,20,40],['动手快，东西做出来就能用',85,40,30,25],['有感染力，能带动大家',25,30,90,20],['细心靠谱，交付不出错',40,60,20,90]]},
+  {d:'性格',q:'团队分工你常担什么角色？',opts:[['出思路/定方案的技术大脑',75,60,25,30],['搜集数据、写分析报告',20,85,15,50],['对外沟通、拉资源',15,25,85,20],['盯进度、保质量',35,45,20,85]]},
+  {d:'价值观',q:'你更看重工作的哪一点？',opts:[['不断学到新东西、解决难题',90,40,20,15],['收入与回报和付出成正比',30,80,30,45],['影响他人、被需要',20,25,90,20],['稳定、可预期、不折腾',30,45,20,90]]},
+];
+var DIRS = {
+  I:'研究/分析/数据方向（金融研究、数据分析、算法等）',
+  R:'技术/工程方向（软件开发、系统、测试等）',
+  E:'经营/市场方向（产品、市场、销售管理等）',
+  C:'规则/流程方向（财务、审计、行政、合规等）',
+};
+var JOBS = {
+  I:['数据分析师','行业研究员','金融分析师'],
+  R:['软件开发工程师','算法工程师','测试开发'],
+  E:['产品经理','市场专员','销售管理'],
+  C:['财务专员','审计员','行政/合规'],
+};
+var ROAD = [
+  {y:'大一',items:['建立学科框架，稳住绩点','学完 1-2 门专业基础课 + 编程/Excel 技能','参加一次社团或竞赛，认识同路人','了解升学（考研/保研/留学）政策，确定主线']},
+  {y:'大二',items:['考下英语四级，六级刷分','参加 1 个专业竞赛（数学建模/行业赛等）','开始职业测评，确定 1-2 个目标方向','争取进课题组或实习']},
+  {y:'大三',items:['目标岗位深度实习 1 段','核心证书（从业资格/软考等）拿下 1-2 个','考研/保研：定方向定院校，启动复习','留学：刷语言 + 准备材料']},
+  {y:'大四',items:['秋招/考研初试/保研九推/留学申请 关键期','完善简历与面试准备（AI 模拟面试）','春招/复试/调剂/录取收尾','完成毕业设计，平稳过渡']},
+];
+var KAOYAN = {
+  major:'计算机科学与技术',
+  dirs:['本专业（计算机）','相关：软件工程 / 人工智能','跨考：金融科技'],
+  subjects:[['政治','思想政治理论'],['外语','英语一/二'],['数学','数学（一/二）'],['专业课','数据结构·操作系统·网络·组成'],['复试','专业面试 + 英语听说']],
+  schools:{high:'计算机学科头部院校',mid:'重点理工院校',base:'省内 211 / 区域强校'},
+};
+var BAOYAN_RULES = ['成绩排名本专业前列（比例以当年文件为准）','无挂科 / 无违纪记录','英语达线（CET-4/6）','综合成绩 = 学业成绩×85% + 奖励加分×15%'];
+
+/* ============ 状态 ============ */
+var STEPS = [
+  {k:'home',t:'首页',no:'①'},{k:'quiz',t:'测评',no:'②'},
+  {k:'result',t:'结果',no:'③'},{k:'road',t:'路线图',no:'④'},
+  {k:'study',t:'深造',no:'⑤'},
+];
+var cur = 'home';
+var qIdx = 0;
+var answers = QUESTIONS.map(function(){return null;});
+var dims = {I:50,R:50,E:50,C:50}; // 兴趣/能力/性格/价值观 → 四码加权
+var DIMCODE = {兴趣:'I',能力:'R',性格:'E',价值观:'C'};
+var radarCtx = null;
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+/* ============ 步骤条 / 视图 ============ */
+function renderSteps(){
+  var done = {home:true};
+  if(answers.every(function(a){return a!==null;})){done.quiz=true;done.result=true;}
+  var html = STEPS.map(function(s){
+    var cls = 'step';
+    if(s.k===cur) cls+=' active';
+    else if(done[s.k]) cls+=' done';
+    return '<div class="'+cls+'" onclick="go(\''+s.k+'\')"><span class="no">'+s.no+'</span>'+s.t+'</div>';
+  }).join('');
+  $('steps').innerHTML = html;
+}
+function go(k){
+  // 测评/结果未完成时不允许跳结果与路线图
+  if((k==='result'||k==='road'||k==='study') && !answers.every(function(a){return a!==null;}) && k!=='home'){alert('请先完成测评（②）');return;}
+  cur = k;
+  document.querySelectorAll('.view').forEach(function(v){v.classList.add('hidden');});
+  $('v-'+k).classList.remove('hidden');
+  if(k==='quiz') renderQuiz();
+  if(k==='result') renderResult();
+  if(k==='road') renderRoad();
+  if(k==='study') renderStudy();
+  renderSteps();
+}
+
+/* ============ 首页 ============ */
+function renderHome(){
+  $('homeGrid').innerHTML = HOME_ITEMS.map(function(it){
+    return '<div class="g" onclick="go(\''+it.dim+'\')"><div class="ico" style="background:var(--brand-soft)">'+it.ico+'</div><b>'+it.t+'</b><span>'+it.d+'</span></div>';
+  }).join('');
+}
+
+/* ============ 测评 ============ */
+function renderQuiz(){
+  var q = QUESTIONS[qIdx];
+  $('qBar').style.width = ((qIdx+1)/QUESTIONS.length*100)+'%';
+  $('qTitle').textContent = '['+q.d+'] '+q.q;
+  $('qOpts').innerHTML = q.opts.map(function(o,i){
+    var sel = answers[qIdx]===i ? ' sel' : '';
+    return '<button class="opt'+sel+'" onclick="pick('+i+')">'+esc(o[0])+'</button>';
+  }).join('');
+  $('qPrev').disabled = qIdx===0;
+  $('qNext').disabled = answers[qIdx]===null;
+  $('qNext').textContent = qIdx===QUESTIONS.length-1 ? '查看结果' : '下一步';
+}
+function pick(i){
+  answers[qIdx] = i;
+  var q = QUESTIONS[qIdx], code = DIMCODE[q.d];
+  // 用当前维度选型的四码权重覆盖
+  dims[code] = q.opts[i][1];
+  // 其余三维同步更新一次（演示版简化：用该选型的其余权重提升）
+  var w = q.opts[i];
+  dims.I = Math.max(dims.I, w[1]*0.9);
+  dims.R = Math.max(dims.R, w[2]*0.9);
+  dims.E = Math.max(dims.E, w[3]*0.9);
+  dims.C = Math.max(dims.C, w[4]*0.9);
+  renderQuiz();
+}
+function nextQ(){
+  if(qIdx<QUESTIONS.length-1){qIdx++;renderQuiz();}
+  else go('result');
+}
+function prevQ(){ if(qIdx>0){qIdx--;renderQuiz();} }
+
+/* ============ 结果 ============ */
+function renderResult(){
+  var top = Object.keys(dims).sort(function(a,b){return dims[b]-dims[a];});
+  var code = top[0], code2 = top[1];
+  $('resVerdict').textContent = '你的主导特质：'+labelOf(code)+'（'+dims[code]+' 分），辅以 '+labelOf(code2)+'。';
+  $('resDirs').innerHTML = [DIRS[code],DIRS[code2]].map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('');
+  $('resJobs').innerHTML = JOBS[code].map(function(j){return '<span class="res-tag">'+j+'</span>';}).join('');
+  $('resActs').innerHTML = ['大二前确定 1-2 个目标方向，选一门硬技能（编程/数据分析/英语）','大三前完成 1 段对口实习，考下 1-2 个核心证书','每学期初用「路线图」排一遍本阶段重点，逐项打卡']
+    .map(function(a){return '<li>'+a+'</li>';}).join('');
+  drawRadar();
+}
+function labelOf(c){return {I:'研究分析',R:'技术工程',E:'经营市场',C:'规则流程'}[c];}
+function drawRadar(){
+  var cv = $('radar'), ctx = cv.getContext('2d');
+  var cx=160, cy=120, R=88;
+  ctx.clearRect(0,0,320,260);
+  var axes = ['职业兴趣','能力倾向','性格特质','职业价值观'];
+  var vals = [dims.I,dims.R,dims.E,dims.C];
+  var ang = function(i){return -Math.PI/2 + i*2*Math.PI/4;};
+  // 网格
+  for(var g=1;g<=4;g++){
+    ctx.beginPath();
+    for(var i=0;i<4;i++){
+      var x=cx+Math.cos(ang(i))*R*g/4, y=cy+Math.sin(ang(i))*R*g/4;
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.closePath();ctx.strokeStyle='#e3e8f5';ctx.lineWidth=1;ctx.stroke();
+  }
+  // 轴线
+  for(var i=0;i<4;i++){
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(ang(i))*R,cy+Math.sin(ang(i))*R);
+    ctx.strokeStyle='#eaecf3';ctx.stroke();
+  }
+  // 数据
+  ctx.beginPath();
+  for(var i=0;i<4;i++){
+    var v=vals[i]/100, x=cx+Math.cos(ang(i))*R*v, y=cy+Math.sin(ang(i))*R*v;
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(47,111,224,.25)';ctx.fill();
+  ctx.strokeStyle='#2f6fe0';ctx.lineWidth=2;ctx.stroke();
+  // 标签
+  ctx.fillStyle='#5c6372';ctx.font='12px sans-serif';ctx.textAlign='center';
+  for(var i=0;i<4;i++){
+    var lx=cx+Math.cos(ang(i))*(R+22), ly=cy+Math.sin(ang(i))*(R+22);
+    ctx.fillText(axes[i],lx,ly);
+  }
+}
+
+/* ============ 路线图 ============ */
+function renderRoad(){
+  $('roadBox').innerHTML = ROAD.map(function(y){
+    return '<div class="yr"><b>'+y.y+'</b><ul>'+y.items.map(function(it){return '<li>'+it+'</li>';}).join('')+'</ul></div>';
+  }).join('');
+}
+
+/* ============ 深造中心 ============ */
+var STUDY_TABS = [['kaoyan','考研'],['baoyan','保研']];
+function renderStudy(){
+  $('studyTabs').innerHTML = STUDY_TABS.map(function(t,i){
+    return '<span class="tb'+(i===0?' on':'')+'" onclick="studyTab('+i+')">'+t[1]+'</span>';
+  }).join('');
+  studyTab(0);
+}
+function studyTab(i){
+  document.querySelectorAll('#studyTabs .tb').forEach(function(b,j){b.classList.toggle('on',j===i);});
+  var key = STUDY_TABS[i][0];
+  var html = '';
+  if(key==='kaoyan'){
+    html += '<div class="sec-title">推荐方向</div><div>'+KAOYAN.dirs.map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('')+'</div>';
+    html += '<div class="sec-title">考试科目</div>';
+    html += '<div>'+KAOYAN.subjects.map(function(s){return '<span class="chip" style="background:#2f6fe0">'+s[0]+'</span>'+' <span class="kv">'+s[1]+'</span>';}).join('<br/>')+'</div>';
+    html += '<div class="sec-title">院校分档（示例）</div>';
+    html += '<div class="kv"><b>冲：</b>'+KAOYAN.schools.high+'　<b>稳：</b>'+KAOYAN.schools.mid+'　<b>保：</b>'+KAOYAN.schools.base+'</div>';
+  } else {
+    html += '<div class="sec-title">推免门槛（示例）</div><ul class="list">'+BAOYAN_RULES.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    html += '<div class="sec-title">加分清单</div><ul class="list">';
+    html += ['全国大学生数学建模竞赛','“互联网+”创新创业大赛','“挑战杯”','大英赛 / 大创项目','核心期刊论文'].map(function(r){return '<li>'+r+'</li>';}).join('');
+    html += '</ul><div class="kv" style="margin-top:8px;color:var(--ink3)">* 具体以学校当年官方文件为准（演示版为通用示例）</div>';
+  }
+  $('studyBody').innerHTML = html;
+}
+
+/* ============ 事件绑定 & 启动 ============ */
+$('qPrev').addEventListener('click', prevQ);
+$('qNext').addEventListener('click', nextQ);
+renderHome();
+renderSteps();
+</script>
+</body>
+</html>
