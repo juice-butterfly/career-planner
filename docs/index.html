@@ -36,41 +36,71 @@
   .nav .tb.on{background:var(--brand);color:#fff;box-shadow:var(--shadow-1)}
   .nav .tb:not(.on):hover{color:var(--brand);background:var(--brand-soft)}
 
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;box-shadow:var(--shadow-1)}
-  .card h2{font-size:16px;margin-bottom:4px;position:relative;padding-left:12px;font-weight:600}
+  .card{background:radial-gradient(110% 70% at 90% -10%,rgba(145,170,205,.10),transparent 50%),var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;box-shadow:var(--shadow-1);position:relative;overflow:hidden;transition:box-shadow .25s,transform .25s}
+  .card::after{content:'';position:absolute;right:-30px;bottom:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,206,140,.12),transparent 65%);filter:blur(10px);pointer-events:none}
+  .card:hover{box-shadow:var(--shadow-2)}
+  .card h2{font-size:16px;margin-bottom:4px;position:relative;padding-left:12px;font-weight:600;z-index:1}
   .card h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:15px;border-radius:4px;background:linear-gradient(180deg,var(--brand),var(--accent))}
-  .card .sub{color:var(--ink3);font-size:12px;margin-bottom:16px}
-  .head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+  .card h2::after{content:'';position:absolute;left:-4px;bottom:-3px;height:2px;width:42%;border-radius:2px;background:linear-gradient(90deg,rgba(255,214,140,.45),transparent);pointer-events:none}
+  .card .sub{color:var(--ink3);font-size:12px;margin-bottom:16px;position:relative;z-index:1}
+  .head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
+  .head-row::after{content:'';position:absolute;left:60px;right:10%;bottom:-9px;height:1px;background:linear-gradient(90deg,rgba(175,195,222,.35),rgba(255,214,140,.15),transparent 85%);pointer-events:none}
   .head-row h2{margin:0}
   .more{font-size:13px;color:var(--accent);cursor:pointer;font-weight:600}
 
-  /* ===== Hero（最终版渐变+光晕+网格） ===== */
-  .hero{border-radius:20px;padding:44px 40px;margin-bottom:20px;background:radial-gradient(120% 140% at 0% 0%,#233047 0%,#37445c 60%,#2c3a52 100%);position:relative;overflow:hidden;color:#fff;box-shadow:var(--shadow-3)}
-  .hero::after{content:'';position:absolute;right:-70px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(120,150,200,.5),transparent 70%);filter:blur(60px);animation:float1 9s ease-in-out infinite}
-  .hero::before{content:'';position:absolute;left:-80px;bottom:-110px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(100,130,175,.4),transparent 70%);filter:blur(60px);animation:float2 11s ease-in-out infinite}
+  /* ===== Hero（成品：海洋灯塔背景 + 光晕 + 扫光 + 网格 + 入场动画） ===== */
+  .hero{border-radius:20px;padding:56px 48px;margin-bottom:22px;background:radial-gradient(120% 140% at 0% 0%,#233047 0%,#37445c 60%,#2c3a52 100%);position:relative;overflow:hidden;color:#fff;box-shadow:var(--shadow-3)}
+  .hero-sea{position:absolute;inset:0;pointer-events:none;background:url('home-sea-lighthouse.jpg') center/cover no-repeat;animation:heroSea 36s ease-in-out infinite alternate}
+  @keyframes heroSea{0%{transform:scale(1.04) translate(0,0)}100%{transform:scale(1.12) translate(-1%,-1%)}}
+  .hero-sea-mask{position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,rgba(18,28,44,0) 20%,rgba(14,22,36,.55) 55%,rgba(12,19,32,.82) 88%,rgba(11,17,30,.9) 100%)}
+  .hero-lamp{position:absolute;left:16%;top:34%;width:120px;height:120px;z-index:1;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,224,150,.5),rgba(255,198,120,.18) 45%,transparent 72%);filter:blur(5px);animation:heroLamp 4.5s ease-in-out infinite}
+  @keyframes heroLamp{0%,100%{opacity:.6}50%{opacity:1}}
+  .hero-glow{position:absolute;border-radius:50%;filter:blur(60px);opacity:.45;pointer-events:none}
+  .glow-1{width:340px;height:340px;right:-70px;top:-90px;background:radial-gradient(circle,rgba(120,150,200,.5),transparent 70%);animation:float1 9s ease-in-out infinite}
+  .glow-2{width:300px;height:300px;left:-80px;bottom:-110px;background:radial-gradient(circle,rgba(100,130,175,.4),transparent 70%);animation:float2 11s ease-in-out infinite}
+  .glow-3{width:220px;height:220px;left:38%;top:-60px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);animation:float3 8s ease-in-out infinite}
   @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,14px) scale(1.06)}}
   @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(24px,-16px)}}
-  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%);-webkit-mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%)}
-  .hero-inner{position:relative;z-index:2}
-  .hero-kicker{display:inline-block;color:#dbe4ff;font-size:12px;letter-spacing:2.5px;margin-bottom:14px;font-weight:600;padding:5px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(6px)}
-  .hero h1{font-size:30px;line-height:1.35;font-weight:700;margin-bottom:12px}
+  @keyframes float3{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.08)}}
+  .hero-gleam{position:absolute;top:-40%;left:-30%;width:60%;height:180%;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.14) 50%,transparent 58%);transform:rotate(8deg);pointer-events:none;animation:honk 7s ease-in-out infinite}
+  .hero-gleam-2{position:absolute;top:-60%;right:-25%;width:50%;height:200%;background:linear-gradient(65deg,transparent 45%,rgba(255,255,255,.10) 52%,transparent 60%);transform:rotate(-10deg);pointer-events:none;animation:honk2 9s ease-in-out infinite}
+  @keyframes honk{0%,62%{left:-30%}78%,100%{left:120%}}
+  @keyframes honk2{0%,55%{right:-25%}75%,100%{right:120%}}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%);-webkit-mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%);pointer-events:none}
+  .hero-inner{position:relative;z-index:2;display:flex;justify-content:flex-end}
+  .hero-copy{max-width:560px;text-align:left}
+  .hero-copy>*{opacity:0;animation:heroReveal .7s cubic-bezier(.22,.61,.36,1) forwards}
+  .hero-copy>*:nth-child(1){animation-delay:.05s}.hero-copy>*:nth-child(2){animation-delay:.18s}
+  .hero-copy>*:nth-child(3){animation-delay:.32s}.hero-copy>*:nth-child(4){animation-delay:.46s}
+  @keyframes heroReveal{from{opacity:0;transform:translateY(18px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+  .hero-kicker{display:inline-block;color:#dbe4ff;font-size:12px;letter-spacing:2.5px;margin-bottom:16px;font-weight:600;padding:5px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .hero h1{font-size:31px;line-height:1.35;font-weight:700;margin:0 0 12px}
   .hero h1 .hl{background:linear-gradient(100deg,#fff 10%,#dbe4ff 55%,#b8c4ff 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-  .hero p{color:rgba(255,255,255,.82);font-size:14px;margin-bottom:22px}
+  .hero p{color:rgba(255,255,255,.82);font-size:14px;margin:0 0 24px}
   .hero .acts{display:flex;gap:12px;flex-wrap:wrap}
-  .btn-cta{background:#fff;border:none;color:var(--brand);font-weight:700;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 8px 20px -6px rgba(0,0,0,.35);transition:.2s}
-  .btn-cta:hover{background:#eef0ff;transform:translateY(-2px)}
-  .btn-ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.35);color:#fff;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;transition:.2s}
-  .btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .btn-cta{background:#fff;border:none;color:var(--brand);font-weight:700;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 8px 20px -6px rgba(0,0,0,.35);transition:.2s;will-change:transform}
+  .btn-cta:hover{background:#eef0ff;transform:translateY(-2px);box-shadow:0 12px 26px -6px rgba(0,0,0,.4)}
+  .btn-cta:active{transform:translateY(1px) scale(.97)}
+  .btn-ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.35);color:#fff;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;backdrop-filter:blur(4px);transition:.2s;will-change:transform}
+  .btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(0,0,0,.3)}
   .demo-note{font-size:11px;opacity:.75;margin-top:12px;background:rgba(0,0,0,.2);display:inline-block;padding:3px 10px;border-radius:8px}
+  @media (max-width:640px){.hero{padding:30px 22px}.hero h1{font-size:22px}.hero-inner{justify-content:flex-start}.hero-copy{max-width:100%}}
 
-  /* ===== 统计卡 ===== */
+  /* ===== 统计卡（成品：渐变 + 雾气韵 + 焦点卡） ===== */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-1)}
-  .stat .ico{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
-  .stat .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat{background:radial-gradient(120% 90% at 85% 0%,rgba(145,170,205,.12),transparent 55%),radial-gradient(90% 70% at 0% 100%,rgba(255,214,140,.10),transparent 60%),var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-1);position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s,opacity .25s,filter .25s}
+  .stat::before{content:'';position:absolute;left:0;right:0;bottom:-18px;height:50%;background:radial-gradient(70% 100% at 20% 100%,rgba(175,195,222,.16),transparent 70%),radial-gradient(60% 90% at 80% 100%,rgba(255,206,140,.10),transparent 70%);filter:blur(8px);opacity:.75;transition:opacity .25s;pointer-events:none}
+  .stat::after{content:'';position:absolute;right:-24px;top:-24px;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle,rgba(150,175,210,.18),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+  .stats:hover .stat{opacity:.65;filter:saturate(.6);transform:scale(.97)}
+  .stats:hover .stat:hover{opacity:1;filter:none;transform:translateY(-6px) scale(1.03);box-shadow:var(--shadow-3);border-color:#7d9ce8}
+  .stat:hover::after{opacity:1}.stat:hover::before{opacity:1}
+  .stat .ico{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;transition:transform .25s,box-shadow .25s}
+  .stat:hover .ico{transform:scale(1.08) rotate(-3deg);box-shadow:var(--shadow-1)}
+  .stat .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;transition:transform .25s,color .25s}
+  .stat:hover .n{transform:translateY(-2px);color:var(--brand)}
   .stat .l{color:var(--ink2);font-size:12px}
   .stat .s{color:var(--ink3);font-size:11px}
-  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:30px 22px}.hero h1{font-size:22px}}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
 
   /* ===== 成长条 ===== */
   .growth{display:flex;align-items:center;flex-wrap:wrap;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-1);margin-bottom:18px}
@@ -129,9 +159,13 @@
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   @media (max-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
   @media (max-width:420px){.grid{grid-template-columns:repeat(2,1fr)}}
-  .g{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 14px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow-1)}
-  .g:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:var(--shadow-2)}
-  .g .ico{width:46px;height:46px;border-radius:13px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .g{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 14px;text-align:center;cursor:pointer;transition:.2s cubic-bezier(.22,.61,.36,1);box-shadow:var(--shadow-1);position:relative;overflow:hidden}
+  .g::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,var(--brand),var(--accent));transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.22,.61,.36,1)}
+  .grid:hover .g{opacity:.55;filter:saturate(.5);transform:scale(.97)}
+  .grid:hover .g:hover{opacity:1;filter:none;transform:translateY(-5px);box-shadow:var(--shadow-2);border-color:transparent}
+  .g:hover::before{transform:scaleX(1)}
+  .g .ico{width:46px;height:46px;border-radius:13px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform .25s}
+  .g:hover .ico{transform:scale(1.1) rotate(-3deg)}
   .g b{display:block;font-size:14px;margin-bottom:4px}
   .g span{font-size:11px;color:var(--ink3)}
 
@@ -239,14 +273,24 @@
 <div class="wrap">
   <div class="view" id="v-home">
     <section class="hero">
+      <div class="hero-sea"></div>
+      <div class="hero-sea-mask"></div>
+      <div class="hero-lamp"></div>
+      <div class="hero-glow glow-1"></div>
+      <div class="hero-glow glow-2"></div>
+      <div class="hero-glow glow-3"></div>
       <div class="hero-grid"></div>
+      <div class="hero-gleam"></div>
+      <div class="hero-gleam-2"></div>
       <div class="hero-inner">
-        <span class="hero-kicker">职引 · 为你的大学生涯定方向</span>
-        <h1>每一段规划，<br/>都朝着理想的职业，<span class="hl">更进一步</span></h1>
-        <p>欢迎回来，果汁。从认识自己开始，一步步靠近理想方向。（单文件演示版 · 示例数据）</p>
-        <div class="acts">
-          <button class="btn-cta" onclick="go('quiz')">开始测评</button>
-          <button class="btn-ghost" onclick="go('plans')">浏览职业规划</button>
+        <div class="hero-copy">
+          <span class="hero-kicker">职引 · 为你的大学生涯定方向</span>
+          <h1>每一段规划，<br/>都朝着理想的职业，<span class="hl">更进一步</span></h1>
+          <p>欢迎回来，果汁。从认识自己开始，一步步靠近理想方向。（单文件演示版 · 示例数据）</p>
+          <div class="acts">
+            <button class="btn-cta" onclick="go('quiz')">开始测评</button>
+            <button class="btn-ghost" onclick="go('plans')">浏览职业规划</button>
+          </div>
         </div>
       </div>
     </section>
