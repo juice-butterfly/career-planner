@@ -6,216 +6,422 @@
 <title>职引 · 大学生职业规划平台 — 交互演示</title>
 <style>
   :root{
-    --brand:#2f6fe0; --brand-dark:#2859b8; --accent:#5a8fe8;
-    --brand-soft:#e8f0fb; --paper:#f6f7fb; --surface:#ffffff;
-    --ink:#1f2433; --ink2:#5c6372; --ink3:#6d7584; --line:#eaecf3;
-    --sage:#34b5a0; --radius:14px; --shadow:0 2px 5px rgba(15,20,40,.06),0 14px 34px -10px rgba(15,20,40,.16);
+    --brand:#2f6fe0; --brand-dark:#2859b8; --brand-soft:#e8f0fb;
+    --accent:#5a8fe8; --accent-soft:#eaf1fd; --sage:#34b5a0;
+    --paper:#f6f7fb; --surface:#ffffff; --ink:#1f2433; --ink2:#5c6372; --ink3:#6d7584;
+    --line:#eaecf3; --radius:14px; --radius-lg:18px;
+    --shadow-1:0 1px 2px rgba(15,20,40,.05),0 3px 10px -3px rgba(15,20,40,.07);
+    --shadow-2:0 2px 5px rgba(15,20,40,.06),0 14px 34px -10px rgba(15,20,40,.16);
+    --shadow-3:0 4px 10px rgba(15,20,40,.07),0 26px 52px -14px rgba(15,20,40,.24);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;padding-bottom:70px}
   a{color:var(--brand);text-decoration:none}
-  .wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px 40px}
 
-  /* 顶栏 */
-  .top{background:linear-gradient(135deg,#1b3a6b 0%,#2f6fe0 100%);color:#fff;padding:18px 0 0}
-  .top-inner{max-width:760px;margin:0 auto;padding:0 16px}
-  .logo-row{display:flex;align-items:center;gap:10px}
-  .logo-mark{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
-  .logo-name{font-weight:700;font-size:18px;letter-spacing:1px}
-  .top-badge{margin-left:auto;font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3)}
-  .hero{padding:26px 0 22px}
-  .hero h1{font-size:24px;font-weight:700;line-height:1.4}
-  .hero p{color:rgba(255,255,255,.85);font-size:13px;margin-top:8px}
-  .demo-note{font-size:11px;opacity:.75;margin-top:10px;background:rgba(0,0,0,.18);display:inline-block;padding:3px 10px;border-radius:8px}
+  /* ===== 顶栏（最终版：署名+用户） ===== */
+  .header{position:sticky;top:0;z-index:50;background:rgba(246,247,251,.86);backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid var(--line)}
+  .hdr-inner{max-width:1080px;margin:0 auto;padding:0 16px;height:58px;display:flex;align-items:center;gap:12px}
+  .logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px}
+  .logo-name{font-weight:700;font-size:16px;letter-spacing:1px}
+  .dev{font-size:11px;color:#b0b5bf;letter-spacing:.3px;white-space:nowrap}
+  .user{margin-left:auto;display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:10px}
+  .user .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+  .user .nm{font-size:13px;color:var(--ink)}
+  .admin-tag{font-size:10px;background:var(--brand);color:#fff;padding:1px 6px;border-radius:4px}
 
-  /* 步骤条 */
-  .steps{display:flex;gap:6px;margin:18px 0;flex-wrap:wrap}
-  .step{flex:1;min-width:96px;text-align:center;padding:10px 6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.2s;font-size:13px;color:var(--ink2)}
-  .step .no{display:block;font-size:11px;color:var(--ink3);font-weight:700}
-  .step.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:var(--shadow)}
-  .step.active .no{color:rgba(255,255,255,.8)}
-  .step.done{background:var(--brand-soft);border-color:var(--accent);color:var(--brand)}
-  .step.done .no{color:var(--accent)}
+  /* ===== 顶部导航 tab（移动端可横滑） ===== */
+  .nav{max-width:1080px;margin:12px auto 0;padding:0 16px;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .nav .tb{flex:1;min-width:64px;text-align:center;padding:8px 10px;border-radius:10px;font-size:13px;color:var(--ink2);cursor:pointer;white-space:nowrap;border:1px solid transparent;transition:.18s}
+  .nav .tb.on{background:var(--brand);color:#fff;box-shadow:var(--shadow-1)}
+  .nav .tb:not(.on):hover{color:var(--brand);background:var(--brand-soft)}
 
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
-  .card h2{font-size:17px;margin-bottom:6px;position:relative;padding-left:12px}
-  .card h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:16px;border-radius:4px;background:linear-gradient(180deg,var(--brand),var(--accent))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;margin-bottom:18px;box-shadow:var(--shadow-1)}
+  .card h2{font-size:16px;margin-bottom:4px;position:relative;padding-left:12px;font-weight:600}
+  .card h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:15px;border-radius:4px;background:linear-gradient(180deg,var(--brand),var(--accent))}
   .card .sub{color:var(--ink3);font-size:12px;margin-bottom:16px}
+  .head-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+  .head-row h2{margin:0}
+  .more{font-size:13px;color:var(--accent);cursor:pointer;font-weight:600}
 
-  /* 首页功能宫格 */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .grid .g{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:.2s}
-  .grid .g:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:var(--shadow)}
-  .grid .g .ico{width:40px;height:40px;border-radius:11px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px}
-  .grid .g b{display:block;font-size:13px}
-  .grid .g span{font-size:11px;color:var(--ink3)}
+  /* ===== Hero（最终版渐变+光晕+网格） ===== */
+  .hero{border-radius:20px;padding:44px 40px;margin-bottom:20px;background:radial-gradient(120% 140% at 0% 0%,#233047 0%,#37445c 60%,#2c3a52 100%);position:relative;overflow:hidden;color:#fff;box-shadow:var(--shadow-3)}
+  .hero::after{content:'';position:absolute;right:-70px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(120,150,200,.5),transparent 70%);filter:blur(60px);animation:float1 9s ease-in-out infinite}
+  .hero::before{content:'';position:absolute;left:-80px;bottom:-110px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(100,130,175,.4),transparent 70%);filter:blur(60px);animation:float2 11s ease-in-out infinite}
+  @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,14px) scale(1.06)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(24px,-16px)}}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%);-webkit-mask-image:radial-gradient(70% 70% at 60% 30%,#000 30%,transparent 100%)}
+  .hero-inner{position:relative;z-index:2}
+  .hero-kicker{display:inline-block;color:#dbe4ff;font-size:12px;letter-spacing:2.5px;margin-bottom:14px;font-weight:600;padding:5px 14px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(6px)}
+  .hero h1{font-size:30px;line-height:1.35;font-weight:700;margin-bottom:12px}
+  .hero h1 .hl{background:linear-gradient(100deg,#fff 10%,#dbe4ff 55%,#b8c4ff 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .hero p{color:rgba(255,255,255,.82);font-size:14px;margin-bottom:22px}
+  .hero .acts{display:flex;gap:12px;flex-wrap:wrap}
+  .btn-cta{background:#fff;border:none;color:var(--brand);font-weight:700;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 8px 20px -6px rgba(0,0,0,.35);transition:.2s}
+  .btn-cta:hover{background:#eef0ff;transform:translateY(-2px)}
+  .btn-ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.35);color:#fff;padding:11px 22px;border-radius:12px;cursor:pointer;font-size:14px;transition:.2s}
+  .btn-ghost:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+  .demo-note{font-size:11px;opacity:.75;margin-top:12px;background:rgba(0,0,0,.2);display:inline-block;padding:3px 10px;border-radius:8px}
 
-  /* 测评题 */
-  .q-progress{height:6px;background:var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
-  .q-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));border-radius:6px;transition:width .3s}
-  .q-title{font-size:16px;font-weight:600;margin-bottom:16px;min-height:48px}
+  /* ===== 统计卡 ===== */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-1)}
+  .stat .ico{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .stat .n{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat .l{color:var(--ink2);font-size:12px}
+  .stat .s{color:var(--ink3);font-size:11px}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:30px 22px}.hero h1{font-size:22px}}
+
+  /* ===== 成长条 ===== */
+  .growth{display:flex;align-items:center;flex-wrap:wrap;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-1);margin-bottom:18px}
+  .growth .lv{width:48px;height:48px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(135deg,var(--brand),var(--accent));box-shadow:var(--shadow-2)}
+  .growth .meta b{font-size:15px;color:var(--ink)}
+  .growth .bar{flex:1;min-width:120px;height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+  .growth .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));border-radius:8px;transition:width .5s}
+  .growth .exp{font-size:12px;color:var(--ink3)}
+  .growth .pts{font-size:13px;color:var(--ink2);padding:2px 10px;border-radius:999px;background:var(--brand-soft)}
+  .btn-sign{background:var(--brand);color:#fff;border:none;padding:7px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .btn-sign:hover{background:var(--brand-dark)}
+  .btn-sign.checked{background:var(--sage)}
+
+  /* ===== 待办 ===== */
+  .todo-alert{margin:0 0 12px;padding:9px 12px;border-radius:9px;background:#e0546f;color:#fff;font-size:13px}
+  .todo-sec{margin-bottom:10px}
+  .todo-sec-t{font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:4px}
+  .todo-sec-t b{color:var(--brand)}
+  .todo-item{display:flex;align-items:center;gap:10px;padding:8px 4px;border-radius:8px;cursor:pointer;font-size:14px}
+  .todo-item:hover{background:var(--brand-soft)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .dot.over{background:#e0546f}
+  .ti{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dim{font-size:11px;padding:0 6px;border-radius:8px;background:var(--brand-soft);color:var(--ink2);flex-shrink:0}
+  .due{font-size:12px;color:var(--ink2);flex-shrink:0}
+  .due.over{color:#e0546f}
+
+  /* ===== 两栏 ===== */
+  .cols{display:grid;grid-template-columns:3fr 2fr;gap:18px;margin-bottom:18px}
+  @media (max-width:768px){.cols{grid-template-columns:1fr}}
+  .chart-box{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+  .chart{width:min(46%,260px);flex-shrink:0}
+  .detail{flex:1;min-width:200px}
+  .detail p{color:var(--ink2);font-size:13px;margin-bottom:10px}
+  .detail b{display:block;font-size:13px;color:var(--ink);margin:8px 0 4px}
+  .detail ul{padding-left:18px;font-size:12px;color:var(--ink2)}
+  .suit{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:12px;padding:2px 9px;border-radius:999px;margin:3px 4px 0 0}
+  .plan-item{padding:12px 0;border-bottom:1px dashed var(--line)}
+  .plan-item:last-child{border-bottom:none}
+  .plan-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .plan-head b{font-size:14px}
+  .plan-bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden}
+  .plan-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent))}
+  .plan-steps{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--ink3)}
+  .plan-steps .on{color:var(--brand);font-weight:700}
+
+  /* ===== 竞赛 ===== */
+  .c-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+  .c{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.18s}
+  .c:hover{box-shadow:var(--shadow-1);transform:translateY(-2px)}
+  .c b{font-size:13px}
+  .c .tag{display:inline-block;font-size:11px;background:#fff4e2;color:#e07b00;padding:1px 7px;border-radius:6px;margin:6px 4px 0 0}
+  .c .due{font-size:11px;color:var(--sage);display:block;margin-top:6px}
+
+  /* ===== 宫格 ===== */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media (max-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:420px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .g{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 14px;text-align:center;cursor:pointer;transition:.2s;box-shadow:var(--shadow-1)}
+  .g:hover{border-color:var(--brand);transform:translateY(-4px);box-shadow:var(--shadow-2)}
+  .g .ico{width:46px;height:46px;border-radius:13px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .g b{display:block;font-size:14px;margin-bottom:4px}
+  .g span{font-size:11px;color:var(--ink3)}
+
+  /* ===== 测评 ===== */
+  .q-bar{height:6px;background:var(--line);border-radius:6px;margin-bottom:20px;overflow:hidden}
+  .q-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--accent));transition:width .3s}
+  .q-t{font-size:16px;font-weight:600;margin-bottom:16px;min-height:44px}
   .opt{display:block;width:100%;text-align:left;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:14px;color:var(--ink);transition:.15s}
   .opt:hover{border-color:var(--brand);background:var(--brand-soft)}
   .opt.sel{border-color:var(--brand);background:var(--brand-soft);font-weight:600}
-  .q-actions{display:flex;justify-content:space-between;margin-top:8px}
+  .q-acts{display:flex;justify-content:space-between;margin-top:10px}
   .btn{border:none;border-radius:10px;padding:10px 18px;font-size:14px;cursor:pointer;font-weight:600;transition:.15s}
   .btn-p{background:var(--brand);color:#fff}
   .btn-p:hover{background:var(--brand-dark)}
   .btn-p:disabled{opacity:.45;cursor:not-allowed}
-  .btn-ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
-  .btn-ghost:hover{color:var(--brand);border-color:var(--brand)}
+  .btn-g{background:#fff;color:var(--ink2);border:1px solid var(--line)}
 
-  /* 结果 */
-  .result-hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-  .radar-wrap{flex:1;min-width:220px}
-  .result-meta{flex:1;min-width:220px}
+  /* ===== 结果 ===== */
+  .res-hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .radar-box{flex:1;min-width:240px;display:flex;justify-content:center}
+  .res-meta{flex:1;min-width:220px}
   .res-tag{display:inline-block;background:var(--brand-soft);color:var(--brand);font-size:12px;padding:3px 10px;border-radius:999px;margin:3px 4px 3px 0}
   .res-verdict{font-size:14px;color:var(--ink2);margin:10px 0}
-  .list li{margin-left:18px;font-size:13px;color:var(--ink2);padding:2px 0}
 
-  /* 路线图 */
+  /* ===== 路线图（规划页） ===== */
   .road{position:relative;padding-left:22px}
   .road::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line);border-radius:2px}
   .road .yr{position:relative;margin-bottom:16px}
   .road .yr::before{content:'';position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand-soft)}
   .road .yr b{color:var(--brand)}
   .road .yr ul{margin-top:4px;margin-left:16px}
-  .road .yr li{font-size:13px;color:var(--ink2);padding:1px 0}
+  .road .yr li{font-size:13px;color:var(--ink2);padding:2px 0}
+  .road .yr li.done{color:var(--sage)}
+  .road .yr li.done::before{content:'✓ '}
+  .road .yr li.over{color:#e0546f}
+  .road .yr li.over::before{content:'⚠ '}
 
-  /* 深造 tab */
-  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  /* ===== 深造 tab ===== */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
   .tabs .tb{padding:7px 16px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:13px;cursor:pointer;color:var(--ink2)}
   .tabs .tb.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   .chip{display:inline-block;font-size:12px;padding:3px 10px;border-radius:8px;margin:3px 4px 0 0;color:#fff}
-  .sec-title{font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--ink)}
+  .sec-t{font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--ink)}
   .kv{font-size:13px;color:var(--ink2);margin:3px 0}
   .kv b{color:var(--ink)}
+  .list{margin-left:18px;font-size:13px;color:var(--ink2)}
+  .list li{padding:2px 0}
 
-  .foot{text-align:center;color:var(--ink3);font-size:12px;margin-top:26px}
-  .hidden{display:none}
-  @media (max-width:480px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:20px}}
+  /* ===== AI 顾问 ===== */
+  .chat-box{display:flex;flex-direction:column;height:min(60vh,480px)}
+  .msgs{flex:1;overflow-y:auto;padding:6px 2px;display:flex;flex-direction:column;gap:12px}
+  .m{max-width:78%;padding:10px 14px;border-radius:12px;font-size:13px;white-space:pre-wrap;word-break:break-word}
+  .m.ai{background:var(--surface);border:1px solid var(--line);color:var(--ink);align-self:flex-start}
+  .m.me{background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;align-self:flex-end}
+  .m .caret{display:inline-block;width:2px;height:1em;margin-left:2px;vertical-align:-2px;background:var(--brand);animation:blink .8s step-start infinite}
+  @keyframes blink{50%{opacity:0}}
+  .chat-input{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+  .chat-input input{flex:1;padding:11px 14px;border:1px solid var(--line);border-radius:10px;font-size:14px;outline:none}
+  .chat-input input:focus{border-color:var(--brand)}
+  .chat-input .btn{flex-shrink:0}
+
+  /* ===== 社区 ===== */
+  .post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-1)}
+  .post .pt{font-size:14px;font-weight:600;margin-bottom:6px}
+  .post .pc{font-size:13px;color:var(--ink2);margin-bottom:10px}
+  .post .pm{display:flex;gap:8px;font-size:12px;color:var(--ink3);align-items:center;flex-wrap:wrap}
+  .post .pm .av{width:22px;height:22px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+  .tag{font-size:11px;padding:1px 7px;border-radius:6px}
+  .tag.tree{background:#e7f7ef;color:#2f9e6e}
+  .tag.exp{background:#fff4e2;color:#e07b00}
+  .tag.anon{background:var(--brand-soft);color:var(--ink2)}
+
+  /* ===== 个人中心 ===== */
+  .prof-hero{background:linear-gradient(135deg,#233047,#37445c);border-radius:20px;padding:26px;color:#fff;display:flex;align-items:center;gap:18px;flex-wrap:wrap;box-shadow:var(--shadow-3);margin-bottom:18px}
+  .prof-hero .big{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--accent));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700}
+  .prof-hero .info b{font-size:17px}
+  .prof-hero .info p{font-size:12px;color:rgba(255,255,255,.8)}
+  .prof-hero .lv-badge{margin-left:auto;background:rgba(255,255,255,.15);padding:5px 12px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.25)}
+  .prof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:640px){.prof-grid{grid-template-columns:repeat(3,1fr)}}
+  .pcell{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow-1)}
+  .pcell .n{font-size:22px;font-weight:700;color:var(--brand)}
+  .pcell .l{font-size:12px;color:var(--ink2)}
+
+  .view.hidden{display:none}
+  .foot{text-align:center;color:var(--ink3);font-size:12px;margin-top:8px}
 </style>
 </head>
 <body>
 
-<div class="top">
-  <div class="top-inner">
-    <div class="logo-row">
-      <div class="logo-mark">引</div>
-      <div class="logo-name">职引</div>
-      <span class="top-badge">交互演示 · 示例数据</span>
-    </div>
-    <div class="hero">
-      <h1>把模糊的「毕业焦虑」<br/>变成可执行的四年路线图</h1>
-      <p>测评定位 → 规划路线 → 深造/竞赛资源，一站式走完。本页为单文件演示版，数据为通用示例。</p>
+<div class="header">
+  <div class="hdr-inner">
+    <div class="logo-mark">引</div>
+    <div class="logo-name">职引</div>
+    <span class="dev">开发者 · 果汁juice</span>
+    <div class="user">
+      <span class="av">果</span>
+      <span class="nm">果汁</span>
+      <span class="admin-tag">管理员</span>
     </div>
   </div>
 </div>
 
+<div class="nav" id="nav"></div>
 <div class="wrap">
-  <!-- 步骤条 -->
-  <div class="steps" id="steps"></div>
-
-  <!-- ① 首页 -->
   <div class="view" id="v-home">
+    <section class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-inner">
+        <span class="hero-kicker">职引 · 为你的大学生涯定方向</span>
+        <h1>每一段规划，<br/>都朝着理想的职业，<span class="hl">更进一步</span></h1>
+        <p>欢迎回来，果汁。从认识自己开始，一步步靠近理想方向。（单文件演示版 · 示例数据）</p>
+        <div class="acts">
+          <button class="btn-cta" onclick="go('quiz')">开始测评</button>
+          <button class="btn-ghost" onclick="go('plans')">浏览职业规划</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="growth" id="growth"></div>
+
     <div class="card">
-      <h2>平台功能</h2>
-      <div class="sub">点击体验核心链路（演示版用内置示例数据）</div>
-      <div class="grid" id="homeGrid"></div>
+      <div class="head-row"><h2>待办</h2><span class="more" onclick="go('plans')">全部规划 →</span></div>
+      <div class="todo-alert">还有 2 项已逾期，抓紧补上</div>
+      <div id="todos"></div>
     </div>
+
+    <div class="cols">
+      <div class="card">
+        <div class="head-row"><h2>最近测评</h2><span class="more" onclick="go('quiz')">完整测评 →</span></div>
+        <div class="chart-box">
+          <div class="chart"><canvas id="radar" width="260" height="220"></canvas></div>
+          <div class="detail">
+            <p id="sumText"></p>
+            <b>你的优势</b><ul id="strList"></ul>
+            <b>适合岗位</b><div id="suitJobs"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="head-row"><h2>进行中的规划</h2><span class="more" onclick="go('plans')">全部规划 →</span></div>
+        <div id="planList"></div>
+      </div>
+    </div>
+
     <div class="card">
-      <h2>它解决什么问题</h2>
-      <ul class="list">
-        <li>不知道自己适合什么方向 → 用四维测评 + AI 解读定位</li>
-        <li>不知道大学四年每学期该做什么 → 按目标生成路线图逐项打卡</li>
-        <li>考研/保研/留学/竞赛/考证信息散 → 全部集中并按专业筛选</li>
-        <li>没有同学一起 → 社区交流，匿名树洞倾诉</li>
-      </ul>
+      <div class="head-row"><h2>近期可报名竞赛</h2><span class="more" onclick="go('study')">竞赛中心 →</span></div>
+      <div class="c-list" id="contests"></div>
+    </div>
+
+    <div class="card">
+      <div class="head-row"><h2>快速入口</h2></div>
+      <div class="grid" id="homeGrid"></div>
     </div>
   </div>
 
-  <!-- ② 测评 -->
   <div class="view hidden" id="v-quiz">
     <div class="card">
-      <div class="q-progress"><i id="qBar" style="width:0%"></i></div>
-      <div class="q-title" id="qTitle"></div>
+      <div class="q-bar"><i id="qBar" style="width:0%"></i></div>
+      <div class="q-t" id="qTitle"></div>
       <div id="qOpts"></div>
-      <div class="q-actions">
-        <button class="btn btn-ghost" id="qPrev">上一步</button>
+      <div class="q-acts">
+        <button class="btn btn-g" id="qPrev">上一步</button>
         <button class="btn btn-p" id="qNext" disabled>下一步</button>
       </div>
     </div>
   </div>
 
-  <!-- ③ 结果 -->
   <div class="view hidden" id="v-result">
     <div class="card">
-      <h2>测评结果 · 四维画像</h2>
-      <div class="result-hero">
-        <div class="radar-wrap"><canvas id="radar" width="320" height="260"></canvas></div>
-        <div class="result-meta">
-          <div id="resVerdict" class="res-verdict"></div>
-          <div class="sec-title">推荐方向</div>
-          <div id="resDirs"></div>
-          <div class="sec-title">适合岗位（示例）</div>
-          <div id="resJobs"></div>
-          <div class="sec-title">建议行动</div>
-          <ul class="list" id="resActs"></ul>
+      <div class="head-row"><h2>测评结果 · 四维画像</h2></div>
+      <div class="res-hero">
+        <div class="radar-box"><canvas id="radar2" width="280" height="240"></canvas></div>
+        <div class="res-meta">
+          <div class="res-verdict" id="resVerdict"></div>
+          <div class="sec-t">推荐方向</div><div id="resDirs"></div>
+          <div class="sec-t">适合岗位（示例）</div><div id="resJobs"></div>
+          <div class="sec-t">建议行动</div><ul class="list" id="resActs"></ul>
         </div>
       </div>
     </div>
-    <div class="card">
-      <h2>下一步</h2>
-      <p style="font-size:13px;color:var(--ink2)">把结果一键生成「四年路线图」，并按目标匹配考研/保研方向与竞赛证书。</p>
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-p" onclick="go('road')">生成我的路线图 →</button>
-        <button class="btn btn-ghost" onclick="go('study')">看深造中心</button>
-      </div>
+    <div class="card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button class="btn btn-p" onclick="go('plans')">生成我的路线图 →</button>
+      <button class="btn btn-g" onclick="go('study')">看深造中心</button>
     </div>
   </div>
 
-  <!-- ④ 路线图 -->
-  <div class="view hidden" id="v-road">
+  <div class="view hidden" id="v-plans">
     <div class="card">
-      <h2>大学四年路线图 · 示例</h2>
-      <div class="sub">按「目标岗位 → 分阶段」生成，可加入规划逐项打卡（演示版为静态示例）</div>
-      <div class="road" id="roadBox"></div>
+      <div class="head-row"><h2>我的规划 · 示例路线图</h2></div>
+      <div id="planRoad"></div>
     </div>
   </div>
 
-  <!-- ⑤ 深造中心 -->
   <div class="view hidden" id="v-study">
     <div class="card">
-      <h2>深造中心 · 示例</h2>
+      <div class="head-row"><h2>深造中心</h2></div>
       <div class="tabs" id="studyTabs"></div>
       <div id="studyBody"></div>
     </div>
   </div>
 
-  <div class="foot">职引 · 单文件交互演示（数据为通用示例，非真实校方资料）· <a href="https://github.com/juice-butterfly/career-planner" target="_blank" rel="noopener">GitHub 仓库</a></div>
+  <div class="view hidden" id="v-ai">
+    <div class="card">
+      <div class="head-row"><h2>AI 职业顾问</h2></div>
+      <div class="chat-box">
+        <div class="msgs" id="aiMsgs"></div>
+        <div class="chat-input">
+          <input id="aiInput" placeholder="问点职业规划问题…" />
+          <button class="btn btn-p" onclick="aiSend()">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view hidden" id="v-forum">
+    <div class="card">
+      <div class="head-row"><h2>社区交流</h2></div>
+      <div class="tabs" id="forumTabs"></div>
+      <div id="forumPosts"></div>
+    </div>
+  </div>
+
+  <div class="view hidden" id="v-profile">
+    <div class="prof-hero">
+      <div class="big">果</div>
+      <div class="info"><b>果汁</b><p>@juice · 金融学+计算机科学与技术双学位实验班 · 2025级</p></div>
+      <span class="lv-badge">Lv3 · 进阶者</span>
+    </div>
+    <div class="prof-grid" id="profGrid"></div>
+  </div>
+
+  <div class="foot">职引 · 单文件交互演示（数据为通用示例）· <a href="https://github.com/juice-butterfly/career-planner" target="_blank" rel="noopener">GitHub 仓库</a></div>
 </div>
 
 <script>
-/* ============ 内置示例数据 ============ */
+/* ================= 内置示例数据 ================= */
+var NAVS = [
+  ['home','首页'],['quiz','测评'],['plans','规划'],['study','深造'],
+  ['ai','AI顾问'],['forum','社区'],['profile','个人中心'],
+];
 var HOME_ITEMS = [
-  {ico:'🧭',t:'职业测评',d:'四维测评 + AI 解读',dim:'quiz'},
-  {ico:'🗺️',t:'我的规划',d:'四年路线图打卡',dim:'road'},
-  {ico:'🎓',t:'深造中心',d:'考研/保研/留学',dim:'study'},
-  {ico:'🏆',t:'竞赛中心',d:'学科竞赛库',dim:'study'},
-  {ico:'📜',t:'证书中心',d:'考证规划',dim:'study'},
-  {ico:'💬',t:'社区交流',d:'经验与树洞',dim:'home'},
+  ['🧭','职业测评','测评你的兴趣与能力','quiz','#2f6fe0'],
+  ['🎓','深造中心','考研/保研/留学','study','#5a8fe8'],
+  ['🏆','竞赛中心','学科竞赛库','study','#34b5a0'],
+  ['📜','证书中心','考证规划','study','#7b2ff2'],
+  ['🗺️','我的规划','路线图打卡','plans','#2f6fe0'],
+  ['💬','AI 顾问','对话式答疑','ai','#5a8fe8'],
+  ['💼','模拟面试','AI 面试官','ai','#34b5a0'],
+  ['📝','简历工作台','AI 制作简历','ai','#7b2ff2'],
+  ['👥','社区交流','经验与树洞','forum','#2f6fe0'],
+];
+var STATS = [
+  ['🧭','测评次数','3 次','','#e8f0fb','#2f6fe0'],
+  ['🗺️','已建规划数','2 个','','#eaf1fd','#5a8fe8'],
+  ['📈','平均进度','64%','','#e7f7ef','#34b5a0'],
+  ['💬','论坛活跃度','8 帖 · 12 评','','#e8f0fb','#2f6fe0'],
+];
+var TODO = [
+  ['专业待办', [['完成《微积分》课后习题 · 第三周','课程','2026-10-20',false],['整理《货币金融学》知识点笔记','课程','2026-10-22',false]]],
+  ['大一', [['参加数学建模校赛报名','竞赛','2026-10-10',true],['报名大学英语四级','证书','2026-10-15',true],['确定职业测评并读解读','绩点','2026-10-18',false]]],
+  ['大二', [['投递第一份暑期实习','实践','2026-11-01',false]]],
+];
+var PLANS = [
+  {t:'金融分析师 · 四年路线图', pct:68, steps:['大一','大二','大三','大四'], on:2},
+  {t:'考研（金融学）· 备考路线', pct:35, steps:['基础','强化','冲刺','复试'], on:1},
+];
+var CONTESTS = [
+  ['“东方财富杯”全国大学生金融挑战赛','你的学院对口','剩 18 天报名'],
+  ['“中金所杯”金融知识大赛','你的学院对口','剩 25 天报名'],
+  ['中国国际大学生创新大赛','保研·综测加分重点','以官网为准'],
+  ['全国大学生数学建模竞赛','保研重点认可','已截止'],
 ];
 var QUESTIONS = [
   {d:'兴趣',q:'周末你更愿意怎么过？',opts:[['泡实验室/写代码做东西',90,30,10,5],['看行业报告/研究财经热点',10,85,20,15],['约朋友聚会/组织活动',20,15,80,25],['整理房间/记账做表格',15,25,15,85]]},
   {d:'能力',q:'同学通常因为什么夸你？',opts:[['逻辑清楚，能把复杂事讲明白',80,70,20,40],['动手快，东西做出来就能用',85,40,30,25],['有感染力，能带动大家',25,30,90,20],['细心靠谱，交付不出错',40,60,20,90]]},
   {d:'性格',q:'团队分工你常担什么角色？',opts:[['出思路/定方案的技术大脑',75,60,25,30],['搜集数据、写分析报告',20,85,15,50],['对外沟通、拉资源',15,25,85,20],['盯进度、保质量',35,45,20,85]]},
   {d:'价值观',q:'你更看重工作的哪一点？',opts:[['不断学到新东西、解决难题',90,40,20,15],['收入与回报和付出成正比',30,80,30,45],['影响他人、被需要',20,25,90,20],['稳定、可预期、不折腾',30,45,20,90]]},
+  {d:'兴趣',q:'哪种学习方式你最能投入？',opts:[['动手做项目、边做边学',90,45,20,20],['读研报/论文，啃数据',15,90,15,40],['小组讨论、头脑风暴',20,20,90,25],['列清单、按计划逐项推进',30,45,15,90]]},
+  {d:'能力',q:'你最有把握做好的一件事是？',opts:[['把一段代码/模型调通',90,55,20,30],['做一份让别人看得懂的分析报告',20,90,25,55],['说服一群人按你的想法走',20,25,90,20],['把繁琐流程做得又稳又准',35,60,20,90]]},
+  {d:'性格',q:'面对陌生任务，你第一反应是？',opts:[['先拆解，找到技术关键点',85,50,20,30],['先查资料，看别人怎么做',20,90,20,50],['先找队友，一起商量',20,25,90,20],['先定计划，控制风险',35,50,20,90]]},
+  {d:'价值观',q:'十年后你最希望自己是？',opts:[['能独立解决难题的专家',90,50,15,20],['有自己判断力的研究者',20,90,15,45],['带团队做成事的人',15,20,90,20],['稳定家庭与生活的可靠人',25,40,20,90]]},
 ];
 var DIRS = {
-  I:'研究/分析/数据方向（金融研究、数据分析、算法等）',
-  R:'技术/工程方向（软件开发、系统、测试等）',
-  E:'经营/市场方向（产品、市场、销售管理等）',
-  C:'规则/流程方向（财务、审计、行政、合规等）',
+  I:'研究 / 分析 / 数据方向（行业研究、数据分析、量化等）',
+  R:'技术 / 工程方向（软件开发、算法、系统等）',
+  E:'经营 / 市场方向（产品、市场、销售管理等）',
+  C:'规则 / 流程方向（财务、审计、行政、合规等）',
 };
 var JOBS = {
   I:['数据分析师','行业研究员','金融分析师'],
@@ -224,188 +430,209 @@ var JOBS = {
   C:['财务专员','审计员','行政/合规'],
 };
 var ROAD = [
-  {y:'大一',items:['建立学科框架，稳住绩点','学完 1-2 门专业基础课 + 编程/Excel 技能','参加一次社团或竞赛，认识同路人','了解升学（考研/保研/留学）政策，确定主线']},
-  {y:'大二',items:['考下英语四级，六级刷分','参加 1 个专业竞赛（数学建模/行业赛等）','开始职业测评，确定 1-2 个目标方向','争取进课题组或实习']},
-  {y:'大三',items:['目标岗位深度实习 1 段','核心证书（从业资格/软考等）拿下 1-2 个','考研/保研：定方向定院校，启动复习','留学：刷语言 + 准备材料']},
-  {y:'大四',items:['秋招/考研初试/保研九推/留学申请 关键期','完善简历与面试准备（AI 模拟面试）','春招/复试/调剂/录取收尾','完成毕业设计，平稳过渡']},
+  {y:'大一',items:[['建立学科框架，稳住绩点',false],['学 1-2 门硬技能（编程/Excel/英语）',true],['参加一次社团或竞赛，认识同路人',false],['了解升学政策，确定主线',false]]},
+  {y:'大二',items:[['四级过关，六级刷分',true],['参加 1 个专业竞赛',true],['完成职业测评，确定 1-2 个目标方向',true],['争取进课题组或第一段实习',false]]},
+  {y:'大三',items:[['目标岗位深度实习 1 段',false],['核心证书拿下 1-2 个',false],['考研/保研定院校，启动复习',false],['留学刷语言 + 准备材料',false]]},
+  {y:'大四',items:[['秋招/考研初试/保研九推/留学申请',false],['完善简历与面试准备',false],['春招/复试/调剂/录取收尾',false],['完成毕业设计',false]]},
 ];
-var KAOYAN = {
-  major:'计算机科学与技术',
-  dirs:['本专业（计算机）','相关：软件工程 / 人工智能','跨考：金融科技'],
-  subjects:[['政治','思想政治理论'],['外语','英语一/二'],['数学','数学（一/二）'],['专业课','数据结构·操作系统·网络·组成'],['复试','专业面试 + 英语听说']],
-  schools:{high:'计算机学科头部院校',mid:'重点理工院校',base:'省内 211 / 区域强校'},
-};
-var BAOYAN_RULES = ['成绩排名本专业前列（比例以当年文件为准）','无挂科 / 无违纪记录','英语达线（CET-4/6）','综合成绩 = 学业成绩×85% + 奖励加分×15%'];
-
-/* ============ 状态 ============ */
-var STEPS = [
-  {k:'home',t:'首页',no:'①'},{k:'quiz',t:'测评',no:'②'},
-  {k:'result',t:'结果',no:'③'},{k:'road',t:'路线图',no:'④'},
-  {k:'study',t:'深造',no:'⑤'},
+var KAOYAN = {dirs:['本专业（计算机）','软件工程 / 人工智能','金融科技'],subjects:[['政治','思想政治理论'],['外语','英语一/二'],['数学','数学（一/二）'],['专业课','数据结构·OS·网络·组成'],['复试','专业面试 + 英语听说']],schools:{high:'计算机学科头部院校',mid:'重点理工院校',base:'省内 211 / 区域强校'}};
+var BAOYAN = ['成绩排名本专业前列','无挂科 / 违纪记录','英语达线（CET-4/6）','综合成绩 = 学业×85% + 奖励×15%'];
+var FORUM = [
+  ['exp','简历','简历的“黄金位置”别浪费：前 1/3 决定你去留','果',12,3],
+  ['exp','面试','无领导小组面试，我这样抢到“计时员”','木子',8,1],
+  ['tree','日常','今天图书馆学到闭馆，突然不焦虑了','树洞用户0034',0,0,true],
+  ['tree','求职','秋招投了 20 家只有 2 家回，怀疑人生','树洞用户0007',0,0,true],
+  ['exp','考研','考研数学三复习时间线（亲测有效）','小北',15,2],
 ];
-var cur = 'home';
-var qIdx = 0;
-var answers = QUESTIONS.map(function(){return null;});
-var dims = {I:50,R:50,E:50,C:50}; // 兴趣/能力/性格/价值观 → 四码加权
-var DIMCODE = {兴趣:'I',能力:'R',性格:'E',价值观:'C'};
-var radarCtx = null;
+var AI_WELCOME = '你好，我是职引 AI 职业顾问。可以问我关于专业方向、考研保研、实习求职、竞赛证书的任何问题（演示版为预设回复）。';
 
+/* ================= 状态 ================= */
+var cur='home', qIdx=0, answers=QUESTIONS.map(function(){return null;});
+var dims={I:50,R:50,E:50,C:50}, DIMCODE={兴趣:'I',能力:'R',性格:'E',价值观:'C'};
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
-/* ============ 步骤条 / 视图 ============ */
-function renderSteps(){
-  var done = {home:true};
-  if(answers.every(function(a){return a!==null;})){done.quiz=true;done.result=true;}
-  var html = STEPS.map(function(s){
-    var cls = 'step';
-    if(s.k===cur) cls+=' active';
-    else if(done[s.k]) cls+=' done';
-    return '<div class="'+cls+'" onclick="go(\''+s.k+'\')"><span class="no">'+s.no+'</span>'+s.t+'</div>';
+/* ================= 导航 ================= */
+function renderNav(){
+  $('nav').innerHTML = NAVS.map(function(n){
+    return '<div class="tb'+(n[0]===cur?' on':'')+'" onclick="go(\''+n[0]+'\')">'+n[1]+'</div>';
   }).join('');
-  $('steps').innerHTML = html;
 }
 function go(k){
-  // 测评/结果未完成时不允许跳结果与路线图
-  if((k==='result'||k==='road'||k==='study') && !answers.every(function(a){return a!==null;}) && k!=='home'){alert('请先完成测评（②）');return;}
-  cur = k;
+  cur=k;
   document.querySelectorAll('.view').forEach(function(v){v.classList.add('hidden');});
   $('v-'+k).classList.remove('hidden');
-  if(k==='quiz') renderQuiz();
-  if(k==='result') renderResult();
-  if(k==='road') renderRoad();
-  if(k==='study') renderStudy();
-  renderSteps();
+  if(k==='quiz')renderQuiz(); if(k==='result')renderResult(); if(k==='plans')renderPlans();
+  if(k==='study')renderStudy(); if(k==='ai')renderAi(); if(k==='forum')renderForum(); if(k==='profile')renderProfile();
+  renderNav();
+  window.scrollTo(0,0);
 }
 
-/* ============ 首页 ============ */
+/* ================= 首页 ================= */
 function renderHome(){
-  $('homeGrid').innerHTML = HOME_ITEMS.map(function(it){
-    return '<div class="g" onclick="go(\''+it.dim+'\')"><div class="ico" style="background:var(--brand-soft)">'+it.ico+'</div><b>'+it.t+'</b><span>'+it.d+'</span></div>';
+  $('stats').innerHTML = STATS.map(function(s){
+    return '<div class="stat"><div class="ico" style="background:'+s[4]+'">'+s[0]+'</div><div><div class="n">'+s[2]+'</div><div class="l">'+s[1]+'</div></div></div>';
   }).join('');
+  $('growth').innerHTML =
+    '<div class="lv">Lv3</div><div class="meta"><b>进阶者</b></div>'+
+    '<div class="bar"><i style="width:64%"></i></div><span class="exp">距 资深者 还差 180 经验</span>'+
+    '<span class="pts">🪙 120</span><button class="btn-sign" id="signBtn" onclick="sign()">今日签到</button>';
+  $('todos').innerHTML = TODO.map(function(sec){
+    return '<div class="todo-sec"><div class="todo-sec-t">'+esc(sec[0])+' <span style="color:var(--ink3);font-weight:400">'+sec[1].length+' 项</span></div>'+
+      sec[1].map(function(t){
+        return '<div class="todo-item" onclick="go(\'plans\')"><span class="dot'+(t[3]?' over':'')+'"></span><span class="ti">'+esc(t[0])+'</span><span class="dim">'+esc(t[1])+'</span><span class="due'+(t[3]?' over':'')+'">'+esc(t[2])+'</span></div>';
+      }).join('')+'</div>';
+  }).join('');
+  $('sumText').textContent = '你的测评画像：研究分析型为主，辅以技术工程。适合走数据/研究路线，大二前确定方向更稳。';
+  $('strList').innerHTML = ['数据分析与结构化思考强','对财经与技术都有兴趣','能独立把一件事做完'].map(function(s){return '<li>'+s+'</li>';}).join('');
+  $('suitJobs').innerHTML = ['数据分析师','行业研究员','金融科技产品'].map(function(j){return '<span class="suit">'+j+'</span>';}).join('');
+  $('planList').innerHTML = PLANS.map(function(p){
+    return '<div class="plan-item"><div class="plan-head"><b>'+esc(p.t)+'</b><span style="font-size:12px;color:var(--accent)">'+p.pct+'%</span></div>'+
+      '<div class="plan-bar"><i style="width:'+p.pct+'%"></i></div>'+
+      '<div class="plan-steps">'+p.steps.map(function(s,i){return '<span class="'+(i<=p.on?'on':'')+'">'+s+'</span>';}).join('<span>·</span>')+'</div></div>';
+  }).join('');
+  $('contests').innerHTML = CONTESTS.map(function(c){
+    return '<div class="c" onclick="go(\'study\')"><b>'+esc(c[0])+'</b><div><span class="tag">'+esc(c[1])+'</span></div><span class="due">'+(c[2]==='已截止'?'已截止':'剩 '+c[2])+'</span></div>';
+  }).join('');
+  $('homeGrid').innerHTML = HOME_ITEMS.map(function(it){
+    return '<div class="g" onclick="go(\''+it[3]+'\')"><div class="ico" style="background:'+it[4]+'22">'+it[0]+'</div><b>'+it[1]+'</b><span>'+it[2]+'</span></div>';
+  }).join('');
+  drawRadar($('radar'),dims,false);
+}
+function sign(){
+  var b=$('signBtn'); if(b.classList.contains('checked'))return;
+  b.classList.add('checked'); b.textContent='已签 3 天'; b.style.background='var(--sage)';
+  alert('签到成功，+5 经验');
 }
 
-/* ============ 测评 ============ */
+/* ================= 测评 ================= */
 function renderQuiz(){
-  var q = QUESTIONS[qIdx];
-  $('qBar').style.width = ((qIdx+1)/QUESTIONS.length*100)+'%';
-  $('qTitle').textContent = '['+q.d+'] '+q.q;
-  $('qOpts').innerHTML = q.opts.map(function(o,i){
-    var sel = answers[qIdx]===i ? ' sel' : '';
-    return '<button class="opt'+sel+'" onclick="pick('+i+')">'+esc(o[0])+'</button>';
+  var q=QUESTIONS[qIdx];
+  $('qBar').style.width=((qIdx+1)/QUESTIONS.length*100)+'%';
+  $('qTitle').textContent='['+q.d+'] '+q.q;
+  $('qOpts').innerHTML=q.opts.map(function(o,i){
+    return '<button class="opt'+(answers[qIdx]===i?' sel':'')+'" onclick="pick('+i+')">'+esc(o[0])+'</button>';
   }).join('');
-  $('qPrev').disabled = qIdx===0;
-  $('qNext').disabled = answers[qIdx]===null;
-  $('qNext').textContent = qIdx===QUESTIONS.length-1 ? '查看结果' : '下一步';
+  $('qPrev').disabled=qIdx===0;
+  $('qNext').disabled=answers[qIdx]===null;
+  $('qNext').textContent=qIdx===QUESTIONS.length-1?'查看结果':'下一步';
 }
 function pick(i){
-  answers[qIdx] = i;
-  var q = QUESTIONS[qIdx], code = DIMCODE[q.d];
-  // 用当前维度选型的四码权重覆盖
-  dims[code] = q.opts[i][1];
-  // 其余三维同步更新一次（演示版简化：用该选型的其余权重提升）
-  var w = q.opts[i];
-  dims.I = Math.max(dims.I, w[1]*0.9);
-  dims.R = Math.max(dims.R, w[2]*0.9);
-  dims.E = Math.max(dims.E, w[3]*0.9);
-  dims.C = Math.max(dims.C, w[4]*0.9);
+  answers[qIdx]=i;
+  var q=QUESTIONS[qIdx],w=q.opts[i];
+  dims[DIMCODE[q.d]]=w[1];
+  dims.I=Math.max(dims.I,w[1]*.9); dims.R=Math.max(dims.R,w[2]*.9); dims.E=Math.max(dims.E,w[3]*.9); dims.C=Math.max(dims.C,w[4]*.9);
   renderQuiz();
 }
-function nextQ(){
-  if(qIdx<QUESTIONS.length-1){qIdx++;renderQuiz();}
-  else go('result');
-}
+function nextQ(){ if(qIdx<QUESTIONS.length-1){qIdx++;renderQuiz();} else go('result'); }
 function prevQ(){ if(qIdx>0){qIdx--;renderQuiz();} }
 
-/* ============ 结果 ============ */
+/* ================= 结果 ================= */
 function renderResult(){
-  var top = Object.keys(dims).sort(function(a,b){return dims[b]-dims[a];});
-  var code = top[0], code2 = top[1];
-  $('resVerdict').textContent = '你的主导特质：'+labelOf(code)+'（'+dims[code]+' 分），辅以 '+labelOf(code2)+'。';
-  $('resDirs').innerHTML = [DIRS[code],DIRS[code2]].map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('');
-  $('resJobs').innerHTML = JOBS[code].map(function(j){return '<span class="res-tag">'+j+'</span>';}).join('');
-  $('resActs').innerHTML = ['大二前确定 1-2 个目标方向，选一门硬技能（编程/数据分析/英语）','大三前完成 1 段对口实习，考下 1-2 个核心证书','每学期初用「路线图」排一遍本阶段重点，逐项打卡']
-    .map(function(a){return '<li>'+a+'</li>';}).join('');
-  drawRadar();
+  var top=Object.keys(dims).sort(function(a,b){return dims[b]-dims[a];});
+  var c=top[0],c2=top[1];
+  $('resVerdict').textContent='你的主导特质：'+labelOf(c)+'（'+dims[c]+' 分），辅以 '+labelOf(c2)+'（'+dims[c2]+' 分）。';
+  $('resDirs').innerHTML=[DIRS[c],DIRS[c2]].map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('');
+  $('resJobs').innerHTML=JOBS[c].map(function(j){return '<span class="res-tag">'+j+'</span>';}).join('');
+  $('resActs').innerHTML=['大二前确定 1-2 个目标方向，选一门硬技能','大三前完成 1 段对口实习 + 1-2 个核心证书','每学期初用「路线图」排本阶段重点，逐项打卡'].map(function(a){return '<li>'+a+'</li>';}).join('');
+  drawRadar($('radar2'),dims,true);
 }
 function labelOf(c){return {I:'研究分析',R:'技术工程',E:'经营市场',C:'规则流程'}[c];}
-function drawRadar(){
-  var cv = $('radar'), ctx = cv.getContext('2d');
-  var cx=160, cy=120, R=88;
-  ctx.clearRect(0,0,320,260);
-  var axes = ['职业兴趣','能力倾向','性格特质','职业价值观'];
-  var vals = [dims.I,dims.R,dims.E,dims.C];
-  var ang = function(i){return -Math.PI/2 + i*2*Math.PI/4;};
-  // 网格
-  for(var g=1;g<=4;g++){
-    ctx.beginPath();
-    for(var i=0;i<4;i++){
-      var x=cx+Math.cos(ang(i))*R*g/4, y=cy+Math.sin(ang(i))*R*g/4;
-      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-    }
-    ctx.closePath();ctx.strokeStyle='#e3e8f5';ctx.lineWidth=1;ctx.stroke();
-  }
-  // 轴线
-  for(var i=0;i<4;i++){
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(ang(i))*R,cy+Math.sin(ang(i))*R);
-    ctx.strokeStyle='#eaecf3';ctx.stroke();
-  }
-  // 数据
+function drawRadar(cv,vals,big){
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)/2-26;
+  ctx.clearRect(0,0,W,H);
+  var axes=['职业兴趣','能力倾向','性格特质','职业价值观'],vv=[vals.I,vals.R,vals.E,vals.C];
+  var ang=function(i){return -Math.PI/2+i*2*Math.PI/4;};
+  for(var g=1;g<=4;g++){ctx.beginPath();for(var i=0;i<4;i++){var x=cx+Math.cos(ang(i))*R*g/4,y=cy+Math.sin(ang(i))*R*g/4;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.closePath();ctx.strokeStyle='#e3e8f5';ctx.stroke();}
+  for(var i=0;i<4;i++){ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(ang(i))*R,cy+Math.sin(ang(i))*R);ctx.strokeStyle='#eaecf3';ctx.stroke();}
   ctx.beginPath();
-  for(var i=0;i<4;i++){
-    var v=vals[i]/100, x=cx+Math.cos(ang(i))*R*v, y=cy+Math.sin(ang(i))*R*v;
-    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-  }
-  ctx.closePath();
-  ctx.fillStyle='rgba(47,111,224,.25)';ctx.fill();
-  ctx.strokeStyle='#2f6fe0';ctx.lineWidth=2;ctx.stroke();
-  // 标签
+  for(var i=0;i<4;i++){var v=vv[i]/100,x=cx+Math.cos(ang(i))*R*v,y=cy+Math.sin(ang(i))*R*v;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.closePath();ctx.fillStyle='rgba(47,111,224,.25)';ctx.fill();ctx.strokeStyle='#2f6fe0';ctx.lineWidth=2;ctx.stroke();
   ctx.fillStyle='#5c6372';ctx.font='12px sans-serif';ctx.textAlign='center';
-  for(var i=0;i<4;i++){
-    var lx=cx+Math.cos(ang(i))*(R+22), ly=cy+Math.sin(ang(i))*(R+22);
-    ctx.fillText(axes[i],lx,ly);
-  }
+  for(var i=0;i<4;i++){ctx.fillText(axes[i],cx+Math.cos(ang(i))*(R+20),cy+Math.sin(ang(i))*(R+20));}
 }
 
-/* ============ 路线图 ============ */
-function renderRoad(){
-  $('roadBox').innerHTML = ROAD.map(function(y){
-    return '<div class="yr"><b>'+y.y+'</b><ul>'+y.items.map(function(it){return '<li>'+it+'</li>';}).join('')+'</ul></div>';
+/* ================= 规划 ================= */
+function renderPlans(){
+  $('planRoad').innerHTML=ROAD.map(function(y){
+    return '<div class="yr"><b>'+y.y+'</b><ul>'+y.items.map(function(it){
+      var cls=it[1]?'done':'';
+      return '<li class="'+cls+'">'+esc(it[0])+'</li>';
+    }).join('')+'</ul></div>';
   }).join('');
 }
 
-/* ============ 深造中心 ============ */
-var STUDY_TABS = [['kaoyan','考研'],['baoyan','保研']];
-function renderStudy(){
-  $('studyTabs').innerHTML = STUDY_TABS.map(function(t,i){
-    return '<span class="tb'+(i===0?' on':'')+'" onclick="studyTab('+i+')">'+t[1]+'</span>';
-  }).join('');
-  studyTab(0);
-}
+/* ================= 深造中心 ================= */
+var STUDY_TABS=[['kaoyan','考研'],['baoyan','保研'],['abroad','留学'],['calendar','升学日历'],['subs','院校追踪']];
+function renderStudy(){$('studyTabs').innerHTML=STUDY_TABS.map(function(t,i){return '<span class="tb'+(i===0?' on':'')+'" onclick="studyTab('+i+')">'+t[1]+'</span>';}).join('');studyTab(0);}
 function studyTab(i){
   document.querySelectorAll('#studyTabs .tb').forEach(function(b,j){b.classList.toggle('on',j===i);});
-  var key = STUDY_TABS[i][0];
-  var html = '';
-  if(key==='kaoyan'){
-    html += '<div class="sec-title">推荐方向</div><div>'+KAOYAN.dirs.map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('')+'</div>';
-    html += '<div class="sec-title">考试科目</div>';
-    html += '<div>'+KAOYAN.subjects.map(function(s){return '<span class="chip" style="background:#2f6fe0">'+s[0]+'</span>'+' <span class="kv">'+s[1]+'</span>';}).join('<br/>')+'</div>';
-    html += '<div class="sec-title">院校分档（示例）</div>';
-    html += '<div class="kv"><b>冲：</b>'+KAOYAN.schools.high+'　<b>稳：</b>'+KAOYAN.schools.mid+'　<b>保：</b>'+KAOYAN.schools.base+'</div>';
+  var k=STUDY_TABS[i][0],h='';
+  if(k==='kaoyan'){
+    h+='<div class="sec-t">推荐方向</div><div>'+KAOYAN.dirs.map(function(d){return '<span class="res-tag">'+d+'</span>';}).join('')+'</div>';
+    h+='<div class="sec-t">考试科目</div>'+KAOYAN.subjects.map(function(s){return '<span class="chip" style="background:#2f6fe0">'+s[0]+'</span> <span class="kv">'+s[1]+'</span><br/>';}).join('');
+    h+='<div class="sec-t">院校分档（示例）</div><div class="kv"><b>冲：</b>'+KAOYAN.schools.high+'　<b>稳：</b>'+KAOYAN.schools.mid+'　<b>保：</b>'+KAOYAN.schools.base+'</div>';
+  } else if(k==='baoyan'){
+    h+='<div class="sec-t">推免门槛（示例）</div><ul class="list">'+BAOYAN.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+    h+='<div class="sec-t">加分清单</div><ul class="list">'+['数学建模竞赛','“互联网+”大赛','“挑战杯”','大英赛 / 大创','核心期刊论文'].map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
+  } else if(k==='abroad'){
+    h+='<div class="sec-t">留学攻略（示例）</div><ul class="list"><li><b>英国：</b>一年制硕士为主，雅思 6.0–7.5，提前一年准备</li><li><b>中国香港：</b>一年制硕士，六级可替代部分语言要求</li><li><b>欧洲大陆：</b>德法荷英文项目，学费相对友好</li></ul>';
+  } else if(k==='calendar'){
+    h+='<div class="sec-t">全年升学日历（示例）</div><ul class="list"><li><b>9 月：</b>考研大纲发布 / 保研预推免开启</li><li><b>10 月：</b>考研报名 / 推免系统填报</li><li><b>12 月：</b>考研初试</li><li><b>次年 2-4 月：</b>出分 / 复试 / 调剂</li></ul>';
   } else {
-    html += '<div class="sec-title">推免门槛（示例）</div><ul class="list">'+BAOYAN_RULES.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>';
-    html += '<div class="sec-title">加分清单</div><ul class="list">';
-    html += ['全国大学生数学建模竞赛','“互联网+”创新创业大赛','“挑战杯”','大英赛 / 大创项目','核心期刊论文'].map(function(r){return '<li>'+r+'</li>';}).join('');
-    html += '</ul><div class="kv" style="margin-top:8px;color:var(--ink3)">* 具体以学校当年官方文件为准（演示版为通用示例）</div>';
+    h+='<div class="sec-t">院校订阅追踪（示例）</div><ul class="list"><li>目标院校：中南财经政法大学（考研 · 已订阅）</li><li>目标院校：复旦大学（保研 · 待准备）</li></ul>';
   }
-  $('studyBody').innerHTML = html;
+  $('studyBody').innerHTML=h;
 }
 
-/* ============ 事件绑定 & 启动 ============ */
-$('qPrev').addEventListener('click', prevQ);
-$('qNext').addEventListener('click', nextQ);
-renderHome();
-renderSteps();
+/* ================= AI 顾问 ================= */
+function renderAi(){ if(!$('aiMsgs').children.length){addMsg('ai',AI_WELCOME);} }
+var AI_REPLY=['你的测评显示研究分析型为主，比较适合数据、金融研究这类方向。','大二这一年建议：先考英语四级，再参加一个专业竞赛（数学建模或金融类都行），同时把编程或 Excel 数据分析练熟。','考研的话现在不用定死院校，先把数学和英语底子打好，大三下再定冲稳保三档。','可以随时问我关于专业方向、实习求职、竞赛证书的问题。'];
+var aiTurn=0;
+function addMsg(who,txt){
+  var d=document.createElement('div');
+  d.className='m '+(who==='me'?'me':'ai');
+  d.innerHTML=esc(txt);
+  $('aiMsgs').appendChild(d);$('aiMsgs').scrollTop=$('aiMsgs').scrollHeight;
+  return d;
+}
+function aiSend(){
+  var v=$('aiInput').value.trim(); if(!v)return;
+  addMsg('me',v);$('aiInput').value='';
+  var d=addMsg('ai','');d.innerHTML='';
+  var full=AI_REPLY[aiTurn%AI_REPLY.length];aiTurn++;
+  var i=0;
+  var timer=setInterval(function(){
+    i++; d.textContent=full.slice(0,i); d.appendChild(spanCaret());
+    if(i>=full.length){clearInterval(timer);d.textContent=full;$('aiMsgs').scrollTop=$('aiMsgs').scrollHeight;}
+  },30);
+}
+function spanCaret(){var s=document.createElement('span');s.className='caret';return s;}
+
+/* ================= 社区 ================= */
+function renderForum(){
+  $('forumTabs').innerHTML='<span class="tb on">经验分享</span><span class="tb">树洞</span>';
+  $('forumPosts').innerHTML=FORUM.map(function(p){
+    var tree=p[6];
+    var head=tree
+      ? '<span class="av" style="background:var(--ink3);color:#fff">🕳️</span><span>'+esc(p[3])+'</span><span class="tag anon">匿名</span><span class="tag tree">树洞</span>'
+      : '<span class="av">'+esc(p[3][0])+'</span><span>'+esc(p[3])+'</span><span class="tag '+ (p[0]==='exp'?'exp':'tree')+'">'+ (p[0]==='exp'?'经验':'树洞') +'</span><span class="tag exp">'+esc(p[1])+'</span>';
+    return '<div class="post"><div class="pt">'+esc(p[2])+'</div><div class="pc">（演示版帖子摘要）</div><div class="pm">'+head+'<span style="margin-left:auto">👍 '+p[4]+' · 💬 '+p[5]+'</span></div></div>';
+  }).join('');
+}
+
+/* ================= 个人中心 ================= */
+function renderProfile(){
+  $('profGrid').innerHTML=[
+    ['120','积分'],['12','成就'],['3','连续签到'],['64%','规划平均进度'],['Lv3','等级'],['8','发帖数']
+  ].map(function(p){return '<div class="pcell"><div class="n">'+p[0]+'</div><div class="l">'+p[1]+'</div></div>';}).join('');
+}
+
+/* ================= 事件 & 启动 ================= */
+$('qPrev').addEventListener('click',prevQ);
+$('qNext').addEventListener('click',nextQ);
+$('aiInput').addEventListener('keydown',function(e){if(e.key==='Enter')aiSend();});
+renderNav();renderHome();
 </script>
 </body>
 </html>
